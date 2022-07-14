@@ -17,22 +17,21 @@ function App() {
       <NavBar />
       <div className="container main-page">
         <div className="row">
-          {/* <div className="col-md-6">
+          <div className="col-md-6">
             <Welcome />
-          </div> */}
+          </div>
           <div className="col-md-6">
             <div className="form-style">
               <BrowserRouter>
                 <Routes>
-                  <Route path="/" element={<Welcome />}></Route>
-                  <Route path="/issue-warranty" element={<IssueWarranty />}></Route>
-                  <Route path="/check-authenticity" element={<CheckAuthenticity />}></Route>
-                  <Route path="/approve" element={<Approve />}></Route>
-                  <Route path="/grant-role" element={<GrantRole />}></Route>
-                  <Route path="/revoke-role" element={<RevokeRole />}></Route>
-                  <Route path="/check-expiry" element={<CheckExpiry />}></Route>
-                  <Route path="/transfer" element={<SafeTrasferFrom />}></Route>
-                  <Route path="/get-warranty-card" element={<GetNFT />}></Route>
+                  <Route path="IssueWarranty" element={<IssueWarranty />}></Route>
+                  <Route path="CheckAuthenticity" element={<CheckAuthenticity />}></Route>
+                  <Route path="Approve" element={<Approve />}></Route>
+                  <Route path="GrantRole" element={<GrantRole />}></Route>
+                  <Route path="RevokeRole" element={<RevokeRole />}></Route>
+                  <Route path="CheckExpiry" element={<CheckExpiry />}></Route>
+                  <Route path="SafeTrasferFrom" element={<SafeTrasferFrom />}></Route>
+                  <Route path="GetNFT" element={<GetNFT />}></Route>
 
                 </Routes>
               </BrowserRouter>

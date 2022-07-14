@@ -8,6 +8,7 @@ import GrantRole from "./components/GrantRole"
 import RevokeRole from "./components/RevokeRole"
 import CheckExpiry from "./components/CheckExpiry"
 import SafeTrasferFrom from "./components/SafeTrasferFrom"
+import GetNFT from "./components/GetNFT";
 import './App.css'
 function App() {
 
@@ -30,6 +31,8 @@ function App() {
                   <Route path="RevokeRole" element={<RevokeRole />}></Route>
                   <Route path="CheckExpiry" element={<CheckExpiry />}></Route>
                   <Route path="SafeTrasferFrom" element={<SafeTrasferFrom />}></Route>
+                  <Route path="GetNFT" element={<GetNFT />}></Route>
+
                 </Routes>
               </BrowserRouter>
               </div>

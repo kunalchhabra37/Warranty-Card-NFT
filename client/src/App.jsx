@@ -17,8 +17,6 @@ function App() {
       <NavBar />
       <div className="container main-page">
         <div className="row">
-          
-          <div className="col-md-6">
             <div className="form-style">
               <BrowserRouter>
                 <Routes>
@@ -31,10 +29,8 @@ function App() {
                   <Route path="check-expiry" element={<CheckExpiry />}></Route>
                   <Route path="transfer" element={<SafeTrasferFrom />}></Route>
                   <Route path="get-warranty-card" element={<GetNFT />}></Route>
-
                 </Routes>
               </BrowserRouter>
-              </div>
           </div>
         </div>
       </div>

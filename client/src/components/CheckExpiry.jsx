@@ -10,20 +10,23 @@ const CheckExpiry = () => {
     console.log(tokenID);
   };
   return (
-    <Form>
-      <Form.Group className="mb-3">
-        <Form.Label>To</Form.Label>
-        <Form.Control
+    <div className="container1">
+      <h1>Check Expiry</h1>
+      <Form>
+        <Form.Group className="mb-3 ctrl">
+          <Form.Label>TokenURI</Form.Label>
+          <Form.Control
             type="text"
-          placeholder="To"
-          value={tokenID}
-          onChange={(e) => setTokenId(e.target.value)}
-        />
-      </Form.Group>
-      <Button variant="primary" type="submit" onClick={handleSubmit}>
-        Submit
-      </Button>
-    </Form>
+            placeholder="TokenID"
+            value={tokenID}
+            onChange={(e) => setTokenId(e.target.value)}
+          />
+        </Form.Group>
+        <Button variant="primary" type="submit" onClick={handleSubmit}>
+          Check
+        </Button>
+      </Form>
+    </div>
   );
 };
 

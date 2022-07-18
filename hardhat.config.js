@@ -1,7 +1,7 @@
 require('dotenv').config();
 require("@nomicfoundation/hardhat-toolbox");
 
-const { PROVIDER_API_URL, WALLET_PRIVATE_KEY } = process.env;
+const { PROVIDER_URL, WALLET_PRIVATE_KEY } = process.env;
 
 module.exports = {
   solidity: "0.8.7",
@@ -9,8 +9,9 @@ module.exports = {
   networks: {
     hardhat:{},
     polygon_mumbai: {
-      url: PROVIDER_API_URL,
+      url: PROVIDER_URL,
       accounts: [WALLET_PRIVATE_KEY]
     }
   }
 }
+

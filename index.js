@@ -1,6 +1,7 @@
 const express = require("express");
-// import issueWarrantyCard from "./scripts/mintWarrantyCard";
+const WarrantyCard2 = require("./config/WarrantyCard2.json");
 const issueWarrantyCard = require("./scripts/mintWarrantyCard");
+const pinFile = require("./scripts/pinJson");
 const app = express();
 
 // Body Parser
@@ -15,17 +16,32 @@ app.post("/api/mint/warrantyCard", async (req, res) => {
     return res.status(401).send("Unauthorized");
   }
   try {
+    WarrantyCard2.name = req.body.name;
+    WarrantyCard2.description = req.body.description;
+    WarrantyCard2.serial_no = req.body.serialNo;
+    WarrantyCard2.product_Id = req.body.product_Id;
+    WarrantyCard2.history.inovice_no = req.body.inovice_no;
+    WarrantyCard2.history.payment_gateway = req.body.payment_gateway;
+    WarrantyCard2.history.platform = req.body.platform;
+    WarrantyCard2.history.purchase_date = req.body.purchase_date;
+    WarrantyCard2.history.transaction_id = req.body.transaction_id;
+    WarrantyCard2.history.transaction_method = req.body.transaction_method;
+    WarrantyCard2.warranty_period = req.body.warrantyEnd;
+    WarrantyCard2.attributes = req.body.attributes;
+    
+    let ipfsHash = await pinFile(WarrantyCard2);
+
     let mint = await issueWarrantyCard(
       req.body.address,
-      req.body.tokenUri,
+      ipfsHash,
       req.body.serialNo,
       req.body.warrantyEnd
     );
-    res.json({ result: mint });
-    return process.exit(0);
+    return res.json({ result: mint });
+    // return process.exit(0);
   } catch (err) {
-    res.status(500).send("Internal Server error");
-    return process.exit(1);
+    return res.status(500).send("Internal Server error");
+    // return process.exit(1);
   }
 });
 

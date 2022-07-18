@@ -11,30 +11,32 @@ const Approve = () => {
     console.log(to, tokenURI);
   };
   return (
-    <Form>
-      <Form.Group className="mb-3">
-        <Form.Label>To</Form.Label>
-        <Form.Control
+    <div className="container1">
+      <h1>Approve</h1>
+      <Form>
+        <Form.Group className="mb-3 ctrl">
+          <Form.Label>To</Form.Label>
+          <Form.Control
             type="text"
-          placeholder="To"
-          value={to}
-          onChange={(e) => setTo(e.target.value)}
-        />
-      </Form.Group>
-
-      <Form.Group className="mb-3">
-        <Form.Label>TokenURI</Form.Label>
-        <Form.Control
-          type="text"
-          placeholder="TokenURI"
-          value={tokenURI}
-          onChange={(e) => setTokenURI(e.target.value)}
-        />
-      </Form.Group>
-      <Button variant="primary" type="submit" onClick={handleSubmit}>
-        Submit
-      </Button>
-    </Form>
+            placeholder="To"
+            value={to}
+            onChange={(e) => setTo(e.target.value)}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3 ctrl">
+          <Form.Label>TokenURI</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="TokenURI"
+            value={tokenURI}
+            onChange={(e) => setTokenURI(e.target.value)}
+          />
+        </Form.Group>
+        <Button variant="primary" type="submit" onClick={handleSubmit}>
+          Approve
+        </Button>
+      </Form>
+    </div>
   );
 };
 export default Approve;

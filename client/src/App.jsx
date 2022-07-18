@@ -15,8 +15,6 @@ function App() {
   return (
     <div className="App">
       <NavBar />
-      <div className="container main-page">
-        <div className="row">
             <div className="form-style">
               <BrowserRouter>
                 <Routes>
@@ -33,9 +31,6 @@ function App() {
               </BrowserRouter>
           </div>
         </div>
-      </div>
-      
-    </div>
   )
 }
 

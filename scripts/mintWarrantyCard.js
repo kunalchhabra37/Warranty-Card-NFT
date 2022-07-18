@@ -47,28 +47,32 @@ const issueWarrantyCard = async (address, tokenUri, serialNo, warrantyEnd) => {
           (await signedTxn).hash,
         "to see your transaction"
       );
+      return (await signedTxn).hash;
     } else {
       console.log("Error submitting transaction");
+      return "Error submitting transaction";
     }
   } catch (err) {
     console.log("err \n\n\n");
     console.log(err);
+    return err;
   }
 };
 
-const main = async () => {
-  try {
-    await issueWarrantyCard(
-      wallet.address,
-      "QmXx3Uq1v6ukb73yi3oL51UJ88xeGdVp4zZy4dBAKTN6yt",
-      111,
-      1658140598
-    );
-    process.exit(0);
-  } catch (err) {
-    console.error(err);
-    process.exit(1);
-  }
-};
+// const main = async () => {
+//   try {
+//     await issueWarrantyCard(
+//       wallet.address,
+//       "QmXx3Uq1v6ukb73yi3oL51UJ88xeGdVp4zZy4dBAKTN6yt",
+//       111,
+//       1658140598
+//     );
+//     process.exit(0);
+//   } catch (err) {
+//     console.error(err);
+//     process.exit(1);
+//   }
+// };
 
-main();
+// main();
+module.exports =  issueWarrantyCard ;

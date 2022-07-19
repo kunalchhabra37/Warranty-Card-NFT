@@ -9,6 +9,7 @@ import RevokeRole from "./components/RevokeRole"
 import CheckExpiry from "./components/CheckExpiry"
 import SafeTrasferFrom from "./components/SafeTrasferFrom"
 import GetNFT from "./components/GetNFT";
+import ViewNFT from "./components/ViewNFT";
 import './App.css'
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
                   <Route path="check-expiry" element={<CheckExpiry />}></Route>
                   <Route path="transfer" element={<SafeTrasferFrom />}></Route>
                   <Route path="get-warranty-card" element={<GetNFT />}></Route>
+                  <Route path="view-nft" element={<ViewNFT />}></Route>
                 </Routes>
               </BrowserRouter>
           </div>

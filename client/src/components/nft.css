@@ -1,0 +1,103 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap");
+:root {
+  --soft-blue: hsl(215, 83%, 47%);
+  --cyan: hsl(208, 100%, 50%);
+
+  /* ### Neutral */
+
+  --main-bg: hsl(269, 68%, 23%);
+  --line: hsl(0, 0%, 100%);
+  --white: hsl(0, 0%, 100%);
+}
+.nft-container {
+  font-family: "Outfit", sans-serif;
+  font-size: 18px;
+  background-color: var(--main-bg);
+  color: hsl(0, 0%, 100%, 60%);
+  padding: 1.25rem;
+}
+.container2 {
+  padding: 1.25rem;
+  background-color: hsla(269, 55%, 53%, 0.864);
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.container2 .main-image {
+  position: relative;
+  max-width: 100%;
+}
+
+.container2 .main-image div {
+  position: absolute;
+  top: 0;
+  background-color: hsl(178, 100%, 50%, 60%);
+  width: 100%;
+  height: calc(100% - 4px);
+  z-index: 999;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.container2 .main-image div:hover {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.container2 .main-image div img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.container2 h2 {
+  color: var(--white);
+  margin: 1rem 0.5rem 0.5rem 0;
+}
+
+.container2 h2:hover {
+  color: var(--cyan);
+  cursor: pointer;
+}
+
+.container2 ul {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  /* border-bottom: 1px solid var(--line); */
+}
+
+.container2 ul li {
+  display: flex;
+  align-items: center;
+}
+
+.container2 ul li:first-child {
+  color: var(--cyan);
+}
+
+@media (min-width: 500px) {
+  .container2 {
+    width: 450px;
+    margin: 0 auto 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container2 {
+    width: 450px;
+    margin: 0 0 0 -5px;
+  }
+  img {
+    max-width: 100%;
+  }
+  body {
+    padding: 0;
+  }
+}
+
+#underline {
+  text-decoration: none;
+}

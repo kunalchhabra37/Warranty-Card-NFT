@@ -24,9 +24,11 @@ export const WarrantyCardProvider = ({ children }) => {
   const [minterRole, setMinterRole] = useState(false);
   const [minterRoleAdmin, setMinterRoleAdmin] = useState(false);
   const [totalSupply, setTotalSupply] = useState(0);
-
+let address = "";
   useEffect(() => {
     checkWalletConnected();
+    hasMinterRole();
+    hasMinterRoleAdmin();
   }, []);
 
   // Runs on page load to check if connected wallet is present
@@ -37,6 +39,8 @@ export const WarrantyCardProvider = ({ children }) => {
       const accounts = await ethereum.request({ method: "eth_accounts" });
       if (accounts.length) {
         setConnectedWallet(accounts[0]);
+        address = accounts[0];
+        console.log(address)
       } else {
         console.log("No account found");
       }
@@ -110,6 +114,34 @@ export const WarrantyCardProvider = ({ children }) => {
       let contract = await getContract();
       return await contract.tokenURI(tokenID);
     } catch (err) {
+      throw "No ethereum object found or metamask not installed";
+    }
+  };
+
+
+  const hasMinterRole = async () => {
+    try {
+      if (!ethereum) return alert("Please Install to MetaMask");
+      let contract = await getContract();
+      let minterRole = await contract.MINTER_ROLE();
+      if(await contract.hasRole(minterRole, address)){
+        setMinterRole(true);
+      }
+    } catch (err) {
+      throw "No ethereum object found or metamask not installed";
+    }
+  };
+
+  const hasMinterRoleAdmin = async () => {
+    try {
+      if (!ethereum) return alert("Please Install to MetaMask");
+      let contract = await getContract();
+      let minterRoleAdmin = await contract.MINTER_ADMIN();
+      if(await contract.hasRole(minterRoleAdmin, address)){
+        setMinterRoleAdmin(true);
+      }
+    } catch (err) {
+     
       throw "No ethereum object found or metamask not installed";
     }
   };

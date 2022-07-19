@@ -6,7 +6,8 @@ import Button from "./Button";
 import { WarrantyCardContext } from "../context/WarrantyCardContext";
 
 function NavBar() {
-  const { connectWallet, connectedWallet } = useContext(WarrantyCardContext);
+  const { connectWallet, connectedWallet, minterRole, minterRoleAdmin } =
+    useContext(WarrantyCardContext);
 
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" sticky="top">
@@ -23,10 +24,10 @@ function NavBar() {
               <Nav.Link href="/approve">Approve</Nav.Link>
               <Nav.Link href="/transfer">Transfer</Nav.Link>
               {/* minter only */}
-              <Nav.Link href="/issue-warranty">Issue Warranty</Nav.Link>
+              {minterRole && (<Nav.Link href="/issue-warranty">Issue Warranty</Nav.Link>)}
               {/* minter admin only */}
-              <Nav.Link href="/grant-role">Grant Role</Nav.Link>
-              <Nav.Link href="/revoke-role">Revoke Role</Nav.Link>
+            {minterRoleAdmin && ( <> <Nav.Link href="/grant-role">Grant Role</Nav.Link>
+              <Nav.Link href="/revoke-role">Revoke Role</Nav.Link></>)}
             </Nav>
           )}
           {!connectedWallet && (

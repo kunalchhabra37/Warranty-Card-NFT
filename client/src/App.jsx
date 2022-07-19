@@ -10,8 +10,13 @@ import CheckExpiry from "./components/CheckExpiry"
 import SafeTrasferFrom from "./components/SafeTrasferFrom"
 import GetNFT from "./components/GetNFT";
 import './App.css'
-function App() {
+// import { useContext } from 'react';
+// import { WarrantyCardContext } from './context/WarrantyCardContext';
 
+
+function App() {
+// const { value } = useContext(WarrantyCardContext);
+// console.log(value)
   return (
     <div className="App">
       <NavBar />

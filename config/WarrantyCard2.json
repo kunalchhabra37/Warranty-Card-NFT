@@ -7,7 +7,7 @@
     "external": "https://store.com/warranty/terms",
     "history":{
         "purchase_date":"12/04/2022 00:00:00",
-        "inovice_no":123456,
+        "invoice_no":123456,
         "transaction_id":123456,
         "transaction_method":"Credit Card",
         "payment_gateway":"Flipkart Payment Gateway",

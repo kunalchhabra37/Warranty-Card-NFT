@@ -1,8 +1,13 @@
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import Button from './Button';
+import { useContext } from "react";
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import Button from "./Button";
+import { WarrantyCardContext } from "../context/WarrantyCardContext";
+
 function NavBar() {
+  const { connectWallet, connectedWallet } = useContext(WarrantyCardContext);
+
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" sticky="top">
       <Container>
@@ -22,7 +27,13 @@ function NavBar() {
             <Nav.Link href="/grant-role">Grant Role</Nav.Link>
             <Nav.Link href="/revoke-role">Revoke Role</Nav.Link>
           </Nav>
-          <Button text="Conntect to Wallet" className="btn-primary text-white btn-style"/>
+          {!connectedWallet && (
+            <Button
+              text="Conntect to Wallet"
+              className="btn-primary text-white btn-style"
+              onClick={connectWallet}
+            />
+          )}
         </Navbar.Collapse>
       </Container>
     </Navbar>

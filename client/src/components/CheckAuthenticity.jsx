@@ -1,17 +1,20 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import { useContext } from "react";
+import { WarrantyCardContext } from "../context/WarrantyCardContext";
 
 const CheckAuthenticity = () => {
+  const { checkAuthenticity } = useContext(WarrantyCardContext);
   const [to, setTo] = useState ("");
-  const [tokenURI, setTokenURI] = useState("");
+  const [tokenID, settokenID] = useState("");
   const [serialNo, setSerialNo] = useState("");
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         
         e.preventDefault();
-        
-    console.log(to, tokenURI, serialNo);
+        let res = await checkAuthenticity(to, tokenID, serialNo);
+        console.log(res)        
   };
   return (
     <div className="container1">
@@ -27,12 +30,12 @@ const CheckAuthenticity = () => {
           />
         </Form.Group>
         <Form.Group className="mb-3 ctrl">
-          <Form.Label>TokenURI</Form.Label>
+          <Form.Label>tokenID</Form.Label>
           <Form.Control
             type="text"
-            placeholder="TokenURI"
-            value={tokenURI}
-            onChange={(e) => setTokenURI(e.target.value)}
+            placeholder="tokenID"
+            value={tokenID}
+            onChange={(e) => settokenID(e.target.value)}
           />
         </Form.Group>
         <Form.Group className="mb-3 ctrl">

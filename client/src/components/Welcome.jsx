@@ -3,7 +3,7 @@ import { WarrantyCardContext } from "../context/WarrantyCardContext";
 import Button from "./Button";
 
 const Welcome = () => {
-    const { connectWallet, connectedWallet } = useContext(WarrantyCardContext);
+    const { connectWallet, connectedWallet, TotalSupply } = useContext(WarrantyCardContext);
 
   return (
     <div>

@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import { useState, useContext } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { useContext } from 'react';
 import { WarrantyCardContext } from "../context/WarrantyCardContext";
 
 const SafeTrasferFrom = () => {

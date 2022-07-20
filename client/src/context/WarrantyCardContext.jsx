@@ -11,11 +11,11 @@ const getContract = async () => {
   const provider = new ethers.providers.Web3Provider(ethereum);
   const wallet = provider.getSigner();
   const contract = new ethers.Contract(contractAddress, contractAbi, wallet);
-  console.log({
-    provider,
-    wallet,
-    contract,
-  });
+  // console.log({
+  //   provider,
+  //   wallet,
+  //   contract,
+  // });
   return { contract, wallet, provider };
 };
 
@@ -41,14 +41,14 @@ export const WarrantyCardProvider = ({ children }) => {
       if (accounts.length) {
         setConnectedWallet(accounts[0]);
         addressConnect = accounts[0];
-        console.log(addressConnect);
+        // console.log(addressConnect);
         await getTotalSupply();
         await hasMinterRole();
         await hasMinterRoleAdmin();
       } else {
         console.log("No account found");
       }
-      console.log(accounts);
+      // console.log(accounts);
     } catch (err) {
       console.log(err);
       throw "No ethereum object found or metamask not installed";
@@ -84,6 +84,7 @@ export const WarrantyCardProvider = ({ children }) => {
       if (err.reason == "Token is Expired") {
         return "Token is Expired";
       }
+      console.log(err);
       throw "No ethereum object found or metamask not installed";
     }
   };
@@ -91,11 +92,11 @@ export const WarrantyCardProvider = ({ children }) => {
   const getTotalSupply = async () => {
     try {
       if (!ethereum) return alert("Please Install to MetaMask");
-      console.log();
       let { contract, wallet, provider } = await getContract();
       let supply = await (await contract.totalSupply()).toNumber();
       setTotalSupply(supply);
     } catch (err) {
+      console.log(err);
       throw "No ethereum object found or metamask not installed";
     }
   };
@@ -104,7 +105,7 @@ export const WarrantyCardProvider = ({ children }) => {
     try {
       if (!ethereum) return alert("Please Install to MetaMask");
       let { contract, wallet, provider } = await getContract();
-      console.log(address, tokenID, serialNo);
+      // console.log(address, tokenID, serialNo);
       return await contract.checkAuthenticity(address, tokenID, serialNo);
     } catch (err) {
       if (err.reason == "Address is not the Owner of token") {
@@ -112,6 +113,7 @@ export const WarrantyCardProvider = ({ children }) => {
       } else if (err.reason == "Token is Expired") {
         return "Token is Expired";
       }
+      console.log(err);
       throw "No ethereum object found or metamask not installed";
     }
   };
@@ -122,6 +124,7 @@ export const WarrantyCardProvider = ({ children }) => {
       let { contract, wallet, provider } = await getContract();
       return await contract.tokenURI(tokenID);
     } catch (err) {
+      console.log(err);
       throw "No ethereum object found or metamask not installed";
     }
   };
@@ -135,6 +138,7 @@ export const WarrantyCardProvider = ({ children }) => {
         setMinterRole(true);
       }
     } catch (err) {
+      console.log(err);
       throw "No ethereum object found or metamask not installed";
     }
   };
@@ -148,6 +152,7 @@ export const WarrantyCardProvider = ({ children }) => {
         setMinterRoleAdmin(true);
       }
     } catch (err) {
+      console.log(err);
       throw "No ethereum object found or metamask not installed";
     }
   };
@@ -214,6 +219,9 @@ export const WarrantyCardProvider = ({ children }) => {
         hash: txn.hash,
       };
     } catch (err) {
+      if (err.reason == "Token is Expired") {
+        return "Token is Expired";
+      }
       console.log(err);
       throw "No ethereum object found or metamask not installed";
     }

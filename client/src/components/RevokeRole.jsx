@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import { useContext } from "react";
+import { WarrantyCardContext } from "../context/WarrantyCardContext";
 
 const RevokeRole = () => {
+  const { revokeRoles } = useContext(WarrantyCardContext);
   const [to, setTo] = useState ("");
   const [role, setRole] = useState("");
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-    console.log(to, role);
+    console.log(role, to);
+    let res = await revokeRoles(role, to);
+    console.log(res);
   };
   return (
     <div className="container1">

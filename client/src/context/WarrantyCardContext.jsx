@@ -16,7 +16,7 @@ const getContract = async () => {
     wallet,
     contract,
   });
-  return {contract, wallet, provider};
+  return { contract, wallet, provider };
 };
 
 export const WarrantyCardProvider = ({ children }) => {
@@ -78,7 +78,7 @@ export const WarrantyCardProvider = ({ children }) => {
   const checkExpiry = async (tokenID) => {
     try {
       if (!ethereum) return alert("Please Install to MetaMask");
-      let {contract, wallet, provider } = await getContract();
+      let { contract, wallet, provider } = await getContract();
       return await contract.checkExpiry(tokenID);
     } catch (err) {
       if (err.reason == "Token is Expired") {
@@ -92,7 +92,7 @@ export const WarrantyCardProvider = ({ children }) => {
     try {
       if (!ethereum) return alert("Please Install to MetaMask");
       console.log();
-      let {contract, wallet, provider} = await getContract();
+      let { contract, wallet, provider } = await getContract();
       let supply = await (await contract.totalSupply()).toNumber();
       setTotalSupply(supply);
     } catch (err) {
@@ -103,7 +103,7 @@ export const WarrantyCardProvider = ({ children }) => {
   const checkAuthenticity = async (address, tokenID, serialNo) => {
     try {
       if (!ethereum) return alert("Please Install to MetaMask");
-      let {contract, wallet, provider} = await getContract();
+      let { contract, wallet, provider } = await getContract();
       console.log(address, tokenID, serialNo);
       return await contract.checkAuthenticity(address, tokenID, serialNo);
     } catch (err) {
@@ -119,7 +119,7 @@ export const WarrantyCardProvider = ({ children }) => {
   const getTokenUri = async (tokenID) => {
     try {
       if (!ethereum) return alert("Please Install to MetaMask");
-      let {contract, wallet, provider} = await getContract();
+      let { contract, wallet, provider } = await getContract();
       return await contract.tokenURI(tokenID);
     } catch (err) {
       throw "No ethereum object found or metamask not installed";
@@ -129,7 +129,7 @@ export const WarrantyCardProvider = ({ children }) => {
   const hasMinterRole = async () => {
     try {
       if (!ethereum) return alert("Please Install to MetaMask");
-      let {contract, wallet, provider} = await getContract();
+      let { contract, wallet, provider } = await getContract();
       let minterRole = await contract.MINTER_ROLE();
       if (await contract.hasRole(minterRole, addressConnect)) {
         setMinterRole(true);
@@ -142,7 +142,7 @@ export const WarrantyCardProvider = ({ children }) => {
   const hasMinterRoleAdmin = async () => {
     try {
       if (!ethereum) return alert("Please Install to MetaMask");
-      let {contract, wallet, provider} = await getContract();
+      let { contract, wallet, provider } = await getContract();
       let minterRoleAdmin = await contract.MINTER_ADMIN();
       if (await contract.hasRole(minterRoleAdmin, addressConnect)) {
         setMinterRoleAdmin(true);
@@ -153,52 +153,62 @@ export const WarrantyCardProvider = ({ children }) => {
   };
 
   const grantRoles = async (role, address) => {
-    try{
-        if(!ethereum) return alert('Please install Metamask');
-        let {contract, wallet, provider} = await getContract();
-        let contractWithSigner = await contract.connect(wallet);
-        if(role == 'MINTER_ROLE'){
-          role = await contract.MINTER_ROLE();
-          console.log(1);
-        }else if(role == 'MINTER_ADMIN'){
-          role = await contract.MINTER_ADMIN();
-          console.log(2)
-        }else{
-          console.log(3)
-          return "Role Not Found";
-        }
-      console.log(role, address);
+    try {
+      if (!ethereum) return alert("Please install Metamask");
+      let { contract, wallet, provider } = await getContract();
+      let contractWithSigner = await contract.connect(wallet);
+      if (role == "MINTER_ROLE") {
+        role = await contract.MINTER_ROLE();
+      } else if (role == "MINTER_ADMIN") {
+        role = await contract.MINTER_ADMIN();
+      } else {
+        return "Role Not Found";
+      }
       let res = await contractWithSigner.grantRole(role, address);
       return res;
-    }catch(err){
+    } catch (err) {
       console.log(err);
       throw "No ethereum object found or metamask not installed";
     }
-  }
+  };
 
   const revokeRoles = async (role, address) => {
-    try{
-        if(!ethereum) return alert('Please install Metamask');
-        let {contract, wallet, provider} = await getContract();
-        let contractWithSigner = await contract.connect(wallet);
-        if(role == 'MINTER_ROLE'){
-          role = await contract.MINTER_ROLE();
-          console.log(1);
-        }else if(role == 'MINTER_ADMIN'){
-          role = await contract.MINTER_ADMIN();
-          console.log(2)
-        }else{
-          console.log(3)
-          return "Role Not found";
-        }
-      console.log(role, address);
+    try {
+      if (!ethereum) return alert("Please install Metamask");
+      let { contract, wallet, provider } = await getContract();
+      let contractWithSigner = await contract.connect(wallet);
+      if (role == "MINTER_ROLE") {
+        role = await contract.MINTER_ROLE();
+      } else if (role == "MINTER_ADMIN") {
+        role = await contract.MINTER_ADMIN();
+      } else {
+        return "Role Not found";
+      }
       let res = await contractWithSigner.revokeRole(role, address);
       return res;
-    }catch(err){
+    } catch (err) {
       console.log(err);
       throw "No ethereum object found or metamask not installed";
     }
-  }
+  };
+
+  const transferWarrantyCard = async (from, to, tokenID) => {
+    try {
+      if (!ethereum) return alert("Please install Metamask");
+      let { contract, wallet, provider } = await getContract();
+      let contractWithSigner = await contract.connect(wallet);
+      let txn = await contractWithSigner["safeTransferFrom(address,address,uint256,bytes)"](from, to, tokenID, []);
+      let reciept = (await txn).wait();
+      return {
+        msg: "Transaction Succesful",
+        hash: txn.hash,
+        blobkNumber: reciept.block
+      }
+    } catch (err) {
+      console.log(err);
+      throw "No ethereum object found or metamask not installed";
+    }
+  };
 
   return (
     <WarrantyCardContext.Provider
@@ -212,7 +222,8 @@ export const WarrantyCardProvider = ({ children }) => {
         checkAuthenticity,
         getTokenUri,
         grantRoles,
-        revokeRoles
+        revokeRoles,
+        transferWarrantyCard
       }}
     >
       {children}

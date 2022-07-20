@@ -1,22 +1,35 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import { useContext } from 'react';
+import { WarrantyCardContext } from "../context/WarrantyCardContext";
 
 const SafeTrasferFrom = () => {
+const { transferWarrantyCard } = useContext(WarrantyCardContext);
+
   const [to, setTo] = useState ("");
-  const [tokenURI, setTokenURI] = useState("");
+  const [tokenID, setTokenID] = useState("");
   const [from, setFrom] = useState("");
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         
         e.preventDefault();
-        
-    console.log(to, tokenURI, from);
+        let res = await transferWarrantyCard(from, to , tokenID);
+        console.log(res);
   };
   return (
     <div className="container1">
       <h1>Transfer</h1>
       <Form>
+      <Form.Group className="mb-3 ctrl">
+          <Form.Label>From</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="From"
+            value={from}
+            onChange={(e) => setFrom(e.target.value)}
+          />
+        </Form.Group>
         <Form.Group className="mb-3 ctrl">
           <Form.Label>To</Form.Label>
           <Form.Control
@@ -27,23 +40,15 @@ const SafeTrasferFrom = () => {
           />
         </Form.Group>
         <Form.Group className="mb-3 ctrl">
-          <Form.Label>TokenURI</Form.Label>
+          <Form.Label>TokenID</Form.Label>
           <Form.Control
             type="text"
-            placeholder="TokenURI"
-            value={tokenURI}
-            onChange={(e) => setTokenURI(e.target.value)}
+            placeholder="TokenID"
+            value={tokenID}
+            onChange={(e) => setTokenID(e.target.value)}
           />
         </Form.Group>
-        <Form.Group className="mb-3 ctrl">
-          <Form.Label>From</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="From"
-            value={from}
-            onChange={(e) => setFrom(e.target.value)}
-          />
-        </Form.Group>
+        
         <Button variant="primary" type="submit" onClick={handleSubmit}>
           Transfer
         </Button>

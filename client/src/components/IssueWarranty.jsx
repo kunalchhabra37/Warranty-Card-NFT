@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import { useContext } from "react";
+import { WarrantyCardContext } from "../context/WarrantyCardContext";
 
 const IssueWarranty = () => {
+  const { issueWarrantyCard } = useContext(WarrantyCardContext);
 
   const [to, setTo] = useState("");
   const [name, setName] = useState("");
@@ -18,9 +21,15 @@ const IssueWarranty = () => {
   const [warranty_period, setWarranty_period] = useState("");
   const [attributes, setAttributes] = useState([]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(to, name, description, serialNo, product_Id, invoice_no, payment_gateway, platform, purchase_date, transaction_id, transaction_method, warranty_period, attributes);
+    let res = await issueWarrantyCard(
+      to,
+      "QmXx3Uq1v6ukb73yi3oL51UJ88xeGdVp4zZy4dBAKTN6yt",
+      serialNo,
+      warranty_period
+    );
+    console.log(res);
   };
   return (
     <div className="container1 mt-3">
@@ -90,7 +99,7 @@ const IssueWarranty = () => {
           />
         </Form.Group>
         <Form.Group className="mb-3 ctrl">
-          <Form.Label>Platform</Form.Label> 
+          <Form.Label>Platform</Form.Label>
           <Form.Control
             type="text"
             placeholder="Enter platform"
@@ -117,7 +126,7 @@ const IssueWarranty = () => {
           />
         </Form.Group>
         <Form.Group className="mb-3 ctrl">
-          <Form.Label>Transaction Method</Form.Label> 
+          <Form.Label>Transaction Method</Form.Label>
           <Form.Control
             type="text"
             placeholder="Enter transaction_method"
@@ -132,7 +141,7 @@ const IssueWarranty = () => {
             placeholder="Enter warranty_period"
             value={warranty_period}
             onChange={(e) => setWarranty_period(e.target.value)}
-          />  
+          />
         </Form.Group>
         <Form.Group className="mb-3 ctrl">
           <Form.Label>Attributes</Form.Label>
@@ -144,7 +153,6 @@ const IssueWarranty = () => {
           />
         </Form.Group>
 
-          
         <Button variant="primary" type="submit" onClick={handleSubmit}>
           Issue
         </Button>

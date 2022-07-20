@@ -164,8 +164,12 @@ export const WarrantyCardProvider = ({ children }) => {
       } else {
         return "Role Not Found";
       }
-      let res = await contractWithSigner.grantRole(role, address);
-      return res;
+      let txn = await contractWithSigner.grantRole(role, address);
+      await txn.wait();
+      return {
+        msg: "Transaction Succesful",
+        hash: txn.hash,
+      };
     } catch (err) {
       console.log(err);
       throw "No ethereum object found or metamask not installed";
@@ -184,8 +188,12 @@ export const WarrantyCardProvider = ({ children }) => {
       } else {
         return "Role Not found";
       }
-      let res = await contractWithSigner.revokeRole(role, address);
-      return res;
+      let txn = await contractWithSigner.revokeRole(role, address);
+      await txn.wait();
+      return {
+        msg: "Transaction Succesful",
+        hash: txn.hash,
+      };
     } catch (err) {
       console.log(err);
       throw "No ethereum object found or metamask not installed";
@@ -197,13 +205,41 @@ export const WarrantyCardProvider = ({ children }) => {
       if (!ethereum) return alert("Please install Metamask");
       let { contract, wallet, provider } = await getContract();
       let contractWithSigner = await contract.connect(wallet);
-      let txn = await contractWithSigner["safeTransferFrom(address,address,uint256,bytes)"](from, to, tokenID, []);
-      let reciept = (await txn).wait();
+      let txn = await contractWithSigner[
+        "safeTransferFrom(address,address,uint256,bytes)"
+      ](from, to, tokenID, []);
+      await txn.wait();
       return {
         msg: "Transaction Succesful",
         hash: txn.hash,
-        blobkNumber: reciept.block
-      }
+      };
+    } catch (err) {
+      console.log(err);
+      throw "No ethereum object found or metamask not installed";
+    }
+  };
+
+  const issueWarrantyCard = async (
+    address,
+    tokenURI,
+    serialNo,
+    warrantyEnd
+  ) => {
+    try {
+      if (!ethereum) return alert("Please install Metamask");
+      let { contract, wallet, provider } = await getContract();
+      let contractWithSigner = await contract.connect(wallet);
+      let txn = await contractWithSigner.issueWarrantyCard(
+        address,
+        tokenURI,
+        serialNo,
+        warrantyEnd
+      );
+      await txn.wait();
+      return {
+        msg: "Transaction Succesful",
+        hash: txn.hash,
+      };
     } catch (err) {
       console.log(err);
       throw "No ethereum object found or metamask not installed";
@@ -223,7 +259,8 @@ export const WarrantyCardProvider = ({ children }) => {
         getTokenUri,
         grantRoles,
         revokeRoles,
-        transferWarrantyCard
+        transferWarrantyCard,
+        issueWarrantyCard
       }}
     >
       {children}

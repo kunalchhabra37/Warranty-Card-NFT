@@ -24,10 +24,17 @@ function NavBar() {
               <Nav.Link href="/approve">Approve</Nav.Link>
               <Nav.Link href="/transfer">Transfer</Nav.Link>
               {/* minter only */}
-              {minterRole && (<Nav.Link href="/issue-warranty">Issue Warranty</Nav.Link>)}
+              {minterRole && (
+                <Nav.Link href="/issue-warranty">Issue Warranty</Nav.Link>
+              )}
               {/* minter admin only */}
-            {minterRoleAdmin && ( <> <Nav.Link href="/grant-role">Grant Role</Nav.Link>
-              <Nav.Link href="/revoke-role">Revoke Role</Nav.Link></>)}
+              {minterRoleAdmin && (
+                <>
+                  {" "}
+                  <Nav.Link href="/grant-role">Grant Role</Nav.Link>
+                  <Nav.Link href="/revoke-role">Revoke Role</Nav.Link>
+                </>
+              )}
             </Nav>
           )}
           {!connectedWallet && (

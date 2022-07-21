@@ -2,6 +2,7 @@ import { useContext } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+import NavDropdown from 'react-bootstrap/NavDropdown';
 import Button from "./Button";
 import { WarrantyCardContext } from "../context/WarrantyCardContext";
 
@@ -31,8 +32,14 @@ function NavBar() {
               {minterRoleAdmin && (
                 <>
                   {" "}
-                  <Nav.Link href="/grant-role">Grant Role</Nav.Link>
-                  <Nav.Link href="/revoke-role">Revoke Role</Nav.Link>
+                  <NavDropdown title="Roles" id="basic-nav-dropdown">
+                    <NavDropdown.Item href="/grant-role">
+                    Grant Role
+                    </NavDropdown.Item>
+                    <NavDropdown.Item href="/revoke-role">
+                    Revoke Role
+                    </NavDropdown.Item>
+                  </NavDropdown>
                 </>
               )}
             </Nav>

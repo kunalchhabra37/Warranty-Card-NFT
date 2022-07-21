@@ -32,11 +32,18 @@ const GrantRole = () => {
         <Form.Group className="mb-3 ctrl">
           <Form.Label>Role</Form.Label>
           <Form.Control
-            type="text"
-            placeholder="Enter Role"
+            as="select"
             value={role}
+            custom
             onChange={(e) => setRole(e.target.value)}
-          />
+          >
+            <option value="">Select Role</option>
+            <option value="MINTER_ROLE">Minter Role</option>
+            <option value="MINTER_ADMIN">Minter Admin</option>
+            <option value="SERVICE_PROVIDER">Service Provider</option>
+            <option value="SERVICE_PROVIDER_ADMIN">Service Provider Admin</option>
+          </Form.Control>
+
         </Form.Group>
         <Button variant="primary" type="submit" onClick={handleSubmit}>
           Submit

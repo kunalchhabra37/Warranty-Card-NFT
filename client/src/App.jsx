@@ -10,6 +10,7 @@ import CheckExpiry from "./components/CheckExpiry"
 import SafeTrasferFrom from "./components/SafeTrasferFrom"
 import GetNFT from "./components/GetNFT";
 import ViewNFT from "./components/ViewNFT";
+import { ToastContainer, toast } from "react-toastify";
 import './App.css'
 // import { useContext } from 'react';
 // import { WarrantyCardContext } from './context/WarrantyCardContext';
@@ -20,6 +21,7 @@ function App() {
 // console.log(value)
   return (
     <div className="App">
+      <ToastContainer />
       <NavBar />
             <div className="form-style">
               <BrowserRouter>

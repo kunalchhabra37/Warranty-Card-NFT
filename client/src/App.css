@@ -38,7 +38,7 @@
   cursor: pointer;
   display: inline-block;
   width: 100%;
-  background: lightblue;
+  /* background: lightblue; */
   padding: 15px;
   font-family: inherit;
   margin-top: 20px;

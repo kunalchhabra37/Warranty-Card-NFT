@@ -2,7 +2,9 @@ import { useState, useContext } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { WarrantyCardContext } from "../context/WarrantyCardContext";
-
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
 const IssueWarranty = () => {
   const { issueWarrantyCard,pinFile } = useContext(WarrantyCardContext);
   const [to, setTo] = useState("");
@@ -13,7 +15,7 @@ const IssueWarranty = () => {
   const [invoice_no, setInvoice_no] = useState("");
   const [payment_gateway, setPayment_gateway] = useState("");
   const [platform, setPlatform] = useState("");
-  const [purchase_date, setPurchase_date] = useState("");
+  const [purchase_date, setPurchase_date] = useState(new Date());
   const [transaction_id, setTransaction_id] = useState("");
   const [transaction_method, setTransaction_method] = useState("");
   const [warranty_period, setWarranty_period] = useState("");
@@ -124,11 +126,11 @@ const IssueWarranty = () => {
         </Form.Group>
         <Form.Group className="mb-3 ctrl">
           <Form.Label>Purchase Date</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter purchase_date"
-            value={purchase_date}
-            onChange={(e) => setPurchase_date(e.target.value)}
+          <DatePicker
+            selected={purchase_date}
+            onChange={(date) => setPurchase_date(date)}
+            dateFormat="MM/dd/yyyy"
+            placeholderText="Enter purchase_date"
           />
         </Form.Group>
         <Form.Group className="mb-3 ctrl">

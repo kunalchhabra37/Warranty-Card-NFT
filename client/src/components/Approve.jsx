@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-
 const Approve = () => {
   const [to, setTo] = useState ("");
   const [tokenURI, setTokenURI] = useState("");
-
     const handleSubmit = (e) => {
         e.preventDefault();
     console.log(to, tokenURI);

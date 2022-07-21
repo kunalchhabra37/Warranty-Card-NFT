@@ -4,8 +4,7 @@ import Form from "react-bootstrap/Form";
 import { WarrantyCardContext } from "../context/WarrantyCardContext";
 
 const IssueWarranty = () => {
-  const { issueWarrantyCard } = useContext(WarrantyCardContext);
-
+  const { issueWarrantyCard,pinFile } = useContext(WarrantyCardContext);
   const [to, setTo] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -22,9 +21,26 @@ const IssueWarranty = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    let hash = await pinFile(
+      to,
+      name,
+      description,
+      serialNo,
+      product_Id,
+      invoice_no,
+      payment_gateway,
+      platform,
+      purchase_date,
+      transaction_id,
+      transaction_method,
+      warranty_period,
+      attributes
+    );
+    console.log(hash);
+
     let res = await issueWarrantyCard(
       to,
-      "QmXx3Uq1v6ukb73yi3oL51UJ88xeGdVp4zZy4dBAKTN6yt",
+      hash,
       serialNo,
       warranty_period
     );

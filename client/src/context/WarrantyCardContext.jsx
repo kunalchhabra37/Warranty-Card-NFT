@@ -1,8 +1,9 @@
 import { createContext, useEffect, useState } from "react";
 import { BigNumber, ethers } from "ethers";
-
-import { contractAbi, contractAddress } from "../utils/constants";
-
+import axios from "axios";
+import { contractAbi, contractAddress, PINATA_API_KEY, PINATA_SECRET_API_KEY } from "../utils/constants";
+import pinataConfig from '../utils/pinataConfig.json';
+import WarrantyCard2 from '../utils/WarrantyCard2.json';
 export const WarrantyCardContext = createContext();
 
 const { ethereum } = window;
@@ -253,7 +254,58 @@ export const WarrantyCardProvider = ({ children }) => {
       throw "No ethereum object found or metamask not installed";
     }
   };
-
+  let config = {
+    method: "post",
+    url: "https://api.pinata.cloud/pinning/pinJSONToIPFS",
+    headers: {
+      "Content-Type": "application/json",
+      pinata_api_key: PINATA_API_KEY,
+      pinata_secret_api_key: PINATA_SECRET_API_KEY,
+    },
+    data: "",
+  };
+  
+  const pinFile = async (
+      to,
+      name,
+      description,
+      serialNo,
+      product_Id,
+      invoice_no,
+      payment_gateway,
+      platform,
+      purchase_date,
+      transaction_id,
+      transaction_method,
+      warranty_period,
+      attributes
+  ) => {
+    try {
+      console.log(1);
+      WarrantyCard2.name = name;
+      WarrantyCard2.description = description;
+      WarrantyCard2.serial_no = serialNo;
+      WarrantyCard2.product_Id = product_Id;
+      WarrantyCard2.history.invoice_no = invoice_no;
+      WarrantyCard2.history.payment_gateway = payment_gateway;
+      WarrantyCard2.history.platform = platform;
+      WarrantyCard2.history.purchase_date = purchase_date;
+      WarrantyCard2.history.transaction_id = transaction_id;
+      WarrantyCard2.history.transaction_method = transaction_method;
+      WarrantyCard2.warranty_period = warranty_period;
+      WarrantyCard2.attributes = attributes;
+      pinataConfig.pinataContent = WarrantyCard2;
+    
+      config.data = JSON.stringify(pinataConfig);
+      console.log(2);
+      let response = await axios(config);
+      console.log(response.data);
+      return response.data.IpfsHash;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  };
   return (
     <WarrantyCardContext.Provider
       value={{
@@ -268,7 +320,8 @@ export const WarrantyCardProvider = ({ children }) => {
         grantRoles,
         revokeRoles,
         transferWarrantyCard,
-        issueWarrantyCard
+        issueWarrantyCard,
+        pinFile
       }}
     >
       {children}

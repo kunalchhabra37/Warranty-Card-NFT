@@ -32,14 +32,12 @@ function NavBar() {
               {minterRoleAdmin && (
                 <>
                   {" "}
-                  <NavDropdown title="Roles" id="basic-nav-dropdown">
-                    <NavDropdown.Item href="/grant-role">
+                    <Nav.Link href="/grant-role">
                     Grant Role
-                    </NavDropdown.Item>
-                    <NavDropdown.Item href="/revoke-role">
+                    </Nav.Link>
+                    <Nav.Link href="/revoke-role">
                     Revoke Role
-                    </NavDropdown.Item>
-                  </NavDropdown>
+                    </Nav.Link>
                 </>
               )}
             </Nav>

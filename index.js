@@ -1,12 +1,16 @@
 const express = require("express");
 const WarrantyCard2 = require("./config/WarrantyCard2.json");
 const issueWarrantyCard = require("./scripts/mintWarrantyCard");
+const burnBot = require("./scripts/burnBot");
 const pinFile = require("./scripts/pinJson");
 const app = express();
 
 // Body Parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+setInterval(burnBot, 60000);
+
 
 app.post("/api/mint/warrantyCard", async (req, res) => {
   // console.log(req.headers["Wallet-Authentication"]);

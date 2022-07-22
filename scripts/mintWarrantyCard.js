@@ -43,7 +43,7 @@ const issueWarrantyCard = async (address, tokenUri, serialNo, warrantyEnd) => {
           "Block Number:" +
           (await reciept).blockNumber +
           "\n" +
-          "Navigate to https://mumbai.polygonscan.com/tx/" +
+          "Navigate to https://testnet.avascan.info/blockchain/c/tx/" +
           (await signedTxn).hash,
         "to see your transaction"
       );

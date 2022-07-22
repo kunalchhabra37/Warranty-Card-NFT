@@ -7,34 +7,45 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 
 contract WarrantyCard is
     ERC721,
     ERC721Enumerable,
     ERC721URIStorage,
     Ownable,
-    AccessControl
+    AccessControl,
+    ERC721Burnable
 {
     struct warrantyCards {
         string serialNo;
         uint256 warrantyEnd;
+        uint serviceCount;
     }
-    // For Assigning IDS
+    // counters for Assigning IDS
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIdCounter;
 
     // mapping to store customers warranty cards
-    mapping(address => mapping(uint256 => warrantyCards))
-        public customerToWarrantyCards;
+    mapping(address => mapping(uint256 => warrantyCards)) public customerToWarrantyCards;
 
-    // mapping to issue warranty card to an address
-    mapping(address => mapping(uint256 => bool)) private issuedWarrantyCard;
+    // Stores TokenIds of all active/notExpired Tokens
+    uint256[] public activeTokenIds;
 
+    // Roles
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     bytes32 public constant MINTER_ADMIN = keccak256("MINTER_ADMIN");
+    bytes32 public constant SERVICE_PROVIDER = keccak256("SERVICE_PROVIDER");
+    bytes32 public constant SERVICE_PROVIDER_ADMIN = keccak256("SERVICE_PROVIDER_ADMIN");
 
-    modifier onlyMinters() {
+    // Modifiers
+    modifier onlyMinters {
         require(hasRole(MINTER_ROLE, msg.sender), "Caller is not a minter");
+        _;
+    }
+
+    modifier onlyServiceProviders {
+        require(hasRole(SERVICE_PROVIDER, msg.sender));
         _;
     }
 
@@ -44,6 +55,9 @@ contract WarrantyCard is
         _setupRole(MINTER_ROLE, msg.sender);
         _setRoleAdmin(MINTER_ROLE, MINTER_ADMIN);
         _setupRole(MINTER_ADMIN, msg.sender);
+        _setupRole(SERVICE_PROVIDER, msg.sender);
+        _setRoleAdmin(SERVICE_PROVIDER, SERVICE_PROVIDER_ADMIN);
+        _setupRole(SERVICE_PROVIDER_ADMIN, msg.sender);
     }
 
     function _baseURI() internal pure override returns (string memory) {
@@ -56,35 +70,15 @@ contract WarrantyCard is
         string memory _tokenUri,
         string memory _serialNo,
         uint64 _warrantyEnd
-    ) public onlyMinters returns (string memory) {
+    ) public onlyMinters  {
         uint256 tokenId = genrateId();
         safeMint(to, tokenId, _tokenUri);
-        customerToWarrantyCards[to][tokenId] = warrantyCards(
-            _serialNo,
-            _warrantyEnd
-        );
-        issuedWarrantyCard[to][tokenId] = true;
-        return tokenURI(tokenId);
+
+        customerToWarrantyCards[to][tokenId] = warrantyCards( _serialNo, _warrantyEnd, 0);
+
+        activeTokenIds.push(tokenId);
     }
 
-    // Recive Warranty Card
-    function recievedWarrantyCard(uint256 _tokenId)
-        public
-        returns (string memory)
-    {
-        // require(checkOwnership(msg.sender, _tokenId),"You are not the owner of token");
-        require(
-            _isApprovedOrOwner(_msgSender(), _tokenId),
-            "ERC721: caller is not token owner nor approved"
-        );
-        require(checkExpiryInternal(_tokenId), "Token is Expired");
-        require(
-            issuedWarrantyCard[msg.sender][_tokenId],
-            "New Warranty Card Not Issued"
-        );
-        issuedWarrantyCard[msg.sender][_tokenId] = false;
-        return tokenURI(_tokenId);
-    }
 
     // Check Authenticity and ownership of Product
     function checkAuthenticity(
@@ -96,32 +90,49 @@ contract WarrantyCard is
             checkOwnership(to, _tokenId),
             "Address is not the Owner of token"
         );
-        require(checkExpiryInternal(_tokenId), "Token is Expired");
+        
+        require(getExpiryDate(_tokenId) >= block.timestamp, "Token is expired");// Extra Validation
+
         if (checkSerialNo(to, _tokenId, _serialNo)) {
-            return "Product Verified";
+            return "User and Product Verified, Warranty valid";
         } else {
             return "Serial Number Don't match";
         }
     }
 
-    // Check warranty Validity
-    function checkExpiry(uint256 _tokenId) public view returns (string memory) {
-        require(checkExpiryInternal(_tokenId), "Token is Expired");
-        return "Warranty Valid";
+   // Fetches Expiry Date of Warranty Card
+    function getExpiryDate(uint256 tokenId) public view returns (uint256) {
+        return customerToWarrantyCards[ownerOf(tokenId)][tokenId].warrantyEnd;
     }
 
-    // Override ERC721 approve method
-    function approve(address to, uint256 tokenId) public override {
-        address owner = ownerOf(tokenId);
-        // require(to != owner, "ERC721: approval to current owner");
-        require(checkOwnership(to, tokenId), "You are not the owner of token");
-        require(checkExpiryInternal(tokenId), "Token is Expired"); // Check Token Expiry
-        require(
-            _msgSender() == owner || isApprovedForAll(owner, _msgSender()),
-            "ERC721: approve caller is not token owner nor approved for all"
-        );
+    function getActiveTokenIdsCount() public view returns (uint256){
+        return activeTokenIds.length;
+    }
 
-        _approve(to, tokenId);
+    function getTokenId(uint256 index) public view returns(uint256){
+        return activeTokenIds[index];
+    }
+
+    // Increases Service count on service
+    function incServiceCount(uint256 tokenId) public onlyServiceProviders {
+        customerToWarrantyCards[ownerOf(tokenId)][tokenId].serviceCount += 1;
+    }
+
+    // Burns the Token on Expiration
+    function burn(uint256 tokenId) public override {
+        require(_isApprovedOrOwner(_msgSender(), tokenId), "ERC721: caller is not token owner nor approved");
+        
+        require(getExpiryDate(tokenId) < block.timestamp, "Token is not expired");// Checks for Invalid Burn Requests
+
+        delete customerToWarrantyCards[ownerOf(tokenId)][tokenId];
+        for(uint256 i = 0; i < activeTokenIds.length; i++){
+
+            if(activeTokenIds[i] == tokenId){
+                activeTokenIds[i] = activeTokenIds[activeTokenIds.length-1];
+                activeTokenIds.pop();
+            }
+        }
+        _burn(tokenId);
     }
 
     // Override ERC721 transferFrom method
@@ -134,14 +145,12 @@ contract WarrantyCard is
             _isApprovedOrOwner(_msgSender(), tokenId),
             "ERC721: caller is not token owner nor approved"
         );
-        require(checkExpiryInternal(tokenId), "Token is Expired"); // Check Token Expiry
-
+        require(getExpiryDate(tokenId) >= block.timestamp, "Token is required");// Extra Validation
+        
         _transfer(from, to, tokenId);
 
-        // ChangesToWarrantyCards
-        customerToWarrantyCards[to][tokenId] = customerToWarrantyCards[from][
-            tokenId
-        ];
+        // update customerToWarrantyCards
+        customerToWarrantyCards[to][tokenId] = customerToWarrantyCards[from][tokenId];
         delete customerToWarrantyCards[from][tokenId];
     }
 
@@ -156,15 +165,18 @@ contract WarrantyCard is
             _isApprovedOrOwner(_msgSender(), tokenId),
             "ERC721: caller is not token owner nor approved"
         );
-        require(checkExpiryInternal(tokenId), "Token is Expired"); // Check Token Expiry
-
+        require(getExpiryDate(tokenId) >= block.timestamp, "Token is required");// Extra Validation
+        
         _safeTransfer(from, to, tokenId, data);
 
-        // ChangesToWarrantyCards
-        customerToWarrantyCards[to][tokenId] = customerToWarrantyCards[from][
-            tokenId
-        ];
+        // Updates customerToWarrantyCards
+        customerToWarrantyCards[to][tokenId] = customerToWarrantyCards[from][tokenId];
         delete customerToWarrantyCards[from][tokenId];
+    }
+
+    // Override ERC 721 Function for approving all tokens to owner for burning 
+    function setApprovalForAll(address tokenOwner,  bool approved) public override{
+        _setApprovalForAll(tokenOwner, owner() , approved);
     }
 
     // Verify Serial Number of Product
@@ -175,19 +187,8 @@ contract WarrantyCard is
     ) internal view returns (bool) {
         return
             keccak256(
-                abi.encodePacked(customerToWarrantyCards[to][tokenId].serialNo)
-            ) == keccak256(abi.encodePacked(serialNo));
-    }
-
-    // Checks if warranty is valid(true) or expired(false)
-    function checkExpiryInternal(uint256 tokenId) internal view returns (bool) {
-        uint256 expiryDate = getExpiryDate(tokenId);
-        return block.timestamp <= expiryDate;
-    }
-
-    // Fetches Expiry Date of Warranty Card
-    function getExpiryDate(uint256 tokenId) internal view returns (uint256) {
-        return customerToWarrantyCards[ownerOf(tokenId)][tokenId].warrantyEnd;
+                abi.encodePacked(customerToWarrantyCards[to][tokenId].serialNo)) 
+                == keccak256(abi.encodePacked(serialNo));
     }
 
     // Check Ownership of Warranty Card
@@ -199,7 +200,7 @@ contract WarrantyCard is
         return tokenOwner == ownerOf(tokenId);
     }
 
-    // genrate Unique ID
+    // genrate Unique ID for minting new tokens
     function genrateId() internal returns (uint256) {
         _tokenIdCounter.increment();
         return _tokenIdCounter.current();
@@ -211,9 +212,13 @@ contract WarrantyCard is
         uint256 tokenId,
         string memory uri
     ) internal {
+        if(!isApprovedForAll(to, owner()) && to != owner()){
+            setApprovalForAll(to, true);
+        }
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
     }
+    
 
     // The following functions are overrides required by Solidity.
 

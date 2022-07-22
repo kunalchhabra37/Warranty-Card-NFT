@@ -2,13 +2,19 @@ import { useContext } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from 'react-bootstrap/NavDropdown';
+import NavDropdown from "react-bootstrap/NavDropdown";
 import Button from "./Button";
 import { WarrantyCardContext } from "../context/WarrantyCardContext";
 
 function NavBar() {
-  const { connectWallet, connectedWallet, minterRole, minterRoleAdmin } =
-    useContext(WarrantyCardContext);
+  const {
+    connectWallet,
+    connectedWallet,
+    minterRole,
+    minterRoleAdmin,
+    serviceProvider,
+    serviceProviderAdmin,
+  } = useContext(WarrantyCardContext);
 
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" sticky="top">
@@ -22,22 +28,18 @@ function NavBar() {
               <Nav.Link href="/check-authenticity">Check Authenticity</Nav.Link>
               <Nav.Link href="/check-expiry">Check Expiry</Nav.Link>
               <Nav.Link href="/get-warranty-card">Get Warranty Card</Nav.Link>
-              <Nav.Link href="/service">Service</Nav.Link>
+              {serviceProvider && <Nav.Link href="/service">Service</Nav.Link>}
               <Nav.Link href="/transfer">Transfer</Nav.Link>
               {/* minter only */}
               {minterRole && (
                 <Nav.Link href="/issue-warranty">Issue Warranty</Nav.Link>
               )}
               {/* minter admin only */}
-              {minterRoleAdmin && (
+              {(minterRoleAdmin || serviceProviderAdmin) && (
                 <>
                   {" "}
-                    <Nav.Link href="/grant-role">
-                    Grant Role
-                    </Nav.Link>
-                    <Nav.Link href="/revoke-role">
-                    Revoke Role
-                    </Nav.Link>
+                  <Nav.Link href="/grant-role">Grant Role</Nav.Link>
+                  <Nav.Link href="/revoke-role">Revoke Role</Nav.Link>
                 </>
               )}
             </Nav>

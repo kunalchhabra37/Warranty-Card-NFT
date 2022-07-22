@@ -12,6 +12,7 @@ const RevokeRole = () => {
     e.preventDefault();
     console.log(role, to);
     let res = await revokeRoles(role, to);
+    console.log(res);
   };
   return (
     <div className="container1">

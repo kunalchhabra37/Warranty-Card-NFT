@@ -24,6 +24,8 @@ export const WarrantyCardProvider = ({ children }) => {
   const [connectedWallet, setConnectedWallet] = useState("");
   const [minterRole, setMinterRole] = useState(false);
   const [minterRoleAdmin, setMinterRoleAdmin] = useState(false);
+  const [serviceProvider, setServiceProvider] = useState(false);
+  const [serviceProviderAdmin, setServiceProviderAdmin] = useState(false);
   const [totalSupply, setTotalSupply] = useState(0);
   let addressConnect = "";
   useEffect(() => {
@@ -31,6 +33,8 @@ export const WarrantyCardProvider = ({ children }) => {
     getTotalSupply();
     hasMinterRole();
     hasMinterRoleAdmin();
+    hasServiceProvider();
+    hasServiceProviderAdmin();
   }, []);
 
   // Runs on page load to check if connected wallet is present
@@ -46,6 +50,8 @@ export const WarrantyCardProvider = ({ children }) => {
         await getTotalSupply();
         await hasMinterRole();
         await hasMinterRoleAdmin();
+        await hasServiceProvider();
+        await hasServiceProviderAdmin();
       } else {
         console.log("No account found");
       }
@@ -69,6 +75,8 @@ export const WarrantyCardProvider = ({ children }) => {
       await getTotalSupply();
       await hasMinterRole();
       await hasMinterRoleAdmin();
+      await hasServiceProvider();
+      await hasServiceProviderAdmin();
     } catch (err) {
       console.log(err);
       throw "No ethereum object found or metamask not installed";
@@ -158,6 +166,34 @@ export const WarrantyCardProvider = ({ children }) => {
     }
   };
 
+  const hasServiceProvider = async () => {
+    try {
+      if (!ethereum) return alert("Please Install to MetaMask");
+      let { contract, wallet, provider } = await getContract();
+      let serviceProvider = await contract.SERVICE_PROVIDER();
+      if (await contract.hasRole(serviceProvider, addressConnect)) {
+        setServiceProvider(true);
+      }
+    } catch (err) {
+      console.log(err);
+      throw "No ethereum object found or metamask not installed";
+    }
+  };
+
+  const hasServiceProviderAdmin = async () => {
+    try {
+      if (!ethereum) return alert("Please Install to MetaMask");
+      let { contract, wallet, provider } = await getContract();
+      let serviceProviderAdmin = await contract.SERVICE_PROVIDER_ADMIN();
+      if (await contract.hasRole(serviceProviderAdmin, addressConnect)) {
+        setServiceProviderAdmin(true);
+      }
+    } catch (err) {
+      console.log(err);
+      throw "No ethereum object found or metamask not installed";
+    }
+  };
+
   const grantRoles = async (role, address) => {
     try {
       if (!ethereum) return alert("Please install Metamask");
@@ -165,9 +201,13 @@ export const WarrantyCardProvider = ({ children }) => {
       let contractWithSigner = await contract.connect(wallet);
       if (role == "MINTER_ROLE") {
         role = await contract.MINTER_ROLE();
-      } else if (role == "MINTER_ADMIN") {
+      }else if (role == "MINTER_ADMIN") {
         role = await contract.MINTER_ADMIN();
-      } else {
+      }else if(role == "SERVICE_PROVIDER"){
+        role = await contract.SERVICE_PROVIDER();
+      }else if(role == "SERVICE_PROVIDER_ADMIN"){
+        role = await contract.SERVICE_PROVIDER_ADMIN();
+      }else {
         return "Role Not Found";
       }
       let txn = await contractWithSigner.grantRole(role, address);
@@ -191,7 +231,11 @@ export const WarrantyCardProvider = ({ children }) => {
         role = await contract.MINTER_ROLE();
       } else if (role == "MINTER_ADMIN") {
         role = await contract.MINTER_ADMIN();
-      } else {
+      } else if(role == "SERVICE_PROVIDER"){
+        role = await contract.SERVICE_PROVIDER();
+      }else if(role == "SERVICE_PROVIDER_ADMIN"){
+        role = await contract.SERVICE_PROVIDER_ADMIN();
+      }else {
         return "Role Not found";
       }
       let txn = await contractWithSigner.revokeRole(role, address);
@@ -321,7 +365,9 @@ export const WarrantyCardProvider = ({ children }) => {
         revokeRoles,
         transferWarrantyCard,
         issueWarrantyCard,
-        pinFile
+        pinFile,
+        serviceProvider,
+        serviceProviderAdmin
       }}
     >
       {children}

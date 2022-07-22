@@ -24,17 +24,18 @@ function NavBar() {
         <Navbar.Collapse id="responsive-navbar-nav">
           {connectedWallet && (
             <Nav>
-              {/* all  */}
+              {/* Open to all Connected Wallet  */}
               <Nav.Link href="/check-authenticity">Check Authenticity</Nav.Link>
               <Nav.Link href="/check-expiry">Check Expiry</Nav.Link>
               <Nav.Link href="/get-warranty-card">Get Warranty Card</Nav.Link>
-              {serviceProvider && <Nav.Link href="/service">Service</Nav.Link>}
               <Nav.Link href="/transfer">Transfer</Nav.Link>
-              {/* minter only */}
+              {/* Service Provider Only */}
+              {serviceProvider && <Nav.Link href="/service">Service</Nav.Link>}
+              {/* Minter Only */}
               {minterRole && (
                 <Nav.Link href="/issue-warranty">Issue Warranty</Nav.Link>
               )}
-              {/* minter admin only */}
+              {/* Roles Admin Only */}
               {(minterRoleAdmin || serviceProviderAdmin) && (
                 <>
                   {" "}

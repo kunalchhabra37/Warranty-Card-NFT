@@ -1,46 +1,101 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import NavBar from "./components/Navbar"
-import IssueWarranty from "./components/IssueWarranty"
-import Welcome from "./components/Welcome"
-import CheckAuthenticity from "./components/CheckAuthenticity"
-import Service from "./components/Service"
-import GrantRole from "./components/GrantRole"
-import RevokeRole from "./components/RevokeRole"
-import CheckExpiry from "./components/CheckExpiry"
-import SafeTrasferFrom from "./components/SafeTrasferFrom"
+import NavBar from "./components/Navbar";
+import IssueWarranty from "./components/IssueWarranty";
+import Welcome from "./components/Welcome";
+import CheckAuthenticity from "./components/CheckAuthenticity";
+import Service from "./components/Service";
+import GrantRole from "./components/GrantRole";
+import RevokeRole from "./components/RevokeRole";
+import CheckExpiry from "./components/CheckExpiry";
+import SafeTrasferFrom from "./components/SafeTrasferFrom";
 import GetNFT from "./components/GetNFT";
 import ViewNFT from "./components/ViewNFT";
+import Unautherised from "./components/Unautherised";
 import { ToastContainer, toast } from "react-toastify";
-import './App.css'
-// import { useContext } from 'react';
-// import { WarrantyCardContext } from './context/WarrantyCardContext';
-
+import "./App.css";
+import { useContext } from "react";
+import { WarrantyCardContext } from "./context/WarrantyCardContext";
 
 function App() {
-// const { value } = useContext(WarrantyCardContext);
-// console.log(value)
+  const {
+    connectedWallet,
+    minterRole,
+    minterRoleAdmin,
+    serviceProvider,
+    serviceProviderAdmin,
+  } = useContext(WarrantyCardContext);
   return (
     <div className="App">
       <ToastContainer />
       <NavBar />
-            <div className="form-style">
-              <BrowserRouter>
-                <Routes>
-                  <Route path="/" element={<Welcome />}></Route>
-                  <Route path="issue-warranty" element={<IssueWarranty />}></Route>
-                  <Route path="check-authenticity" element={<CheckAuthenticity />}></Route>
-                  <Route path="service" element={<Service />}></Route>
-                  <Route path="grant-role" element={<GrantRole />}></Route>
-                  <Route path="revoke-role" element={<RevokeRole />}></Route>
-                  <Route path="check-expiry" element={<CheckExpiry />}></Route>
-                  <Route path="transfer" element={<SafeTrasferFrom />}></Route>
-                  <Route path="get-warranty-card" element={<GetNFT />}></Route>
-                  <Route path="view-nft" element={<ViewNFT />}></Route>
-                </Routes>
-              </BrowserRouter>
-          </div>
-        </div>
-  )
+      <div className="form-style">
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Welcome />}></Route>
+            <Route
+              path="issue-warranty"
+              element={
+                connectedWallet && minterRole ? (
+                  <IssueWarranty />
+                ) : (
+                  <Unautherised />
+                )
+              }
+            ></Route>
+            <Route
+              path="check-authenticity"
+              element={
+                connectedWallet ? <CheckAuthenticity /> : <Unautherised />
+              }
+            ></Route>
+            <Route
+              path="service"
+              element={
+                connectedWallet && serviceProvider ? (
+                  <Service />
+                ) : (
+                  <Unautherised />
+                )
+              }
+            ></Route>
+            <Route
+              path="grant-role"
+              element={
+                connectedWallet && (serviceProviderAdmin || minterRoleAdmin) ? (
+                  <GrantRole />
+                ) : (
+                  <Unautherised />
+                )
+              }
+            ></Route>
+            <Route
+              path="revoke-role"
+              element={
+                connectedWallet && (serviceProviderAdmin || minterRoleAdmin) ? (
+                  <RevokeRole />
+                ) : (
+                  <Unautherised />
+                )
+              }
+            ></Route>
+            <Route
+              path="check-expiry"
+              element={connectedWallet ? <CheckExpiry /> : <Unautherised />}
+            ></Route>
+            <Route
+              path="transfer"
+              element={connectedWallet ? <SafeTrasferFrom /> : <Unautherised />}
+            ></Route>
+            <Route
+              path="get-warranty-card"
+              element={connectedWallet ? <GetNFT /> : <Unautherised />}
+            ></Route>
+            {/* <Route path="view-nft" element={<ViewNFT />}></Route> */}
+          </Routes>
+        </BrowserRouter>
+      </div>
+    </div>
+  );
 }
 
-export default App
+export default App;

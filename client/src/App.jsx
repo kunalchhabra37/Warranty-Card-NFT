@@ -3,7 +3,7 @@ import NavBar from "./components/Navbar"
 import IssueWarranty from "./components/IssueWarranty"
 import Welcome from "./components/Welcome"
 import CheckAuthenticity from "./components/CheckAuthenticity"
-import Approve from "./components/Approve"
+import Service from "./components/Service"
 import GrantRole from "./components/GrantRole"
 import RevokeRole from "./components/RevokeRole"
 import CheckExpiry from "./components/CheckExpiry"
@@ -29,7 +29,7 @@ function App() {
                   <Route path="/" element={<Welcome />}></Route>
                   <Route path="issue-warranty" element={<IssueWarranty />}></Route>
                   <Route path="check-authenticity" element={<CheckAuthenticity />}></Route>
-                  <Route path="approve" element={<Approve />}></Route>
+                  <Route path="service" element={<Service />}></Route>
                   <Route path="grant-role" element={<GrantRole />}></Route>
                   <Route path="revoke-role" element={<RevokeRole />}></Route>
                   <Route path="check-expiry" element={<CheckExpiry />}></Route>

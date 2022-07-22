@@ -22,7 +22,7 @@ function NavBar() {
               <Nav.Link href="/check-authenticity">Check Authenticity</Nav.Link>
               <Nav.Link href="/check-expiry">Check Expiry</Nav.Link>
               <Nav.Link href="/get-warranty-card">Get Warranty Card</Nav.Link>
-              <Nav.Link href="/approve">Approve</Nav.Link>
+              <Nav.Link href="/service">Service</Nav.Link>
               <Nav.Link href="/transfer">Transfer</Nav.Link>
               {/* minter only */}
               {minterRole && (

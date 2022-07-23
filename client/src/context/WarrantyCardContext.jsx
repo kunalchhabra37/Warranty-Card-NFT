@@ -31,10 +31,10 @@ export const WarrantyCardProvider = ({ children }) => {
   useEffect(() => {
     checkWalletConnected();
     getTotalSupply();
-    hasMinterRole();
-    hasMinterRoleAdmin();
-    hasServiceProvider();
-    hasServiceProviderAdmin();
+    // hasMinterRole();
+    // hasMinterRoleAdmin();
+    // hasServiceProvider();
+    // hasServiceProviderAdmin();
   }, []);
 
   // Runs on page load to check if connected wallet is present
@@ -53,11 +53,14 @@ export const WarrantyCardProvider = ({ children }) => {
         await hasServiceProvider();
         await hasServiceProviderAdmin();
       } else {
-        console.log("No account found");
+        return console.log("No account found");
       }
       // console.log(accounts);
     } catch (err) {
-      console.log(err);
+      // if(err.Error == 'unknown account #0 '){
+      //   console
+      // }
+      console.log(err.Error);
       throw "No ethereum object found or metamask not installed";
     }
   };
@@ -84,11 +87,11 @@ export const WarrantyCardProvider = ({ children }) => {
   };
 
   // Check Expiry of Warranty Card
-  const checkExpiry = async (tokenID) => {
+  const getExpiry = async (tokenID) => {
     try {
       if (!ethereum) return alert("Please Install to MetaMask");
       let { contract, wallet, provider } = await getContract();
-      return await contract.checkExpiry(tokenID);
+      return await (await contract.getExpiryDate(tokenID)).toNumber();
     } catch (err) {
       if (err.reason == "Token is Expired") {
         return "Token is Expired";
@@ -272,6 +275,26 @@ export const WarrantyCardProvider = ({ children }) => {
     }
   };
 
+  const incServiceCount = async (tokenID) => {
+    try {
+      if (!ethereum) return alert("Please install Metamask");
+      let { contract, wallet, provider } = await getContract();
+      let contractWithSigner = await contract.connect(wallet);
+      let txn = await contractWithSigner.incServiceCount(tokenID);
+      await txn.wait();
+      return {
+        msg: "Transaction Succesful",
+        hash: txn.hash,
+      };
+    } catch (err) {
+      if (err.reason == "Token is Expired") {
+        return "Token is Expired";
+      }
+      console.log(err);
+      throw "No ethereum object found or metamask not installed";
+    }
+  };
+
   const issueWarrantyCard = async (
     address,
     tokenURI,
@@ -357,7 +380,7 @@ export const WarrantyCardProvider = ({ children }) => {
         connectedWallet,
         minterRole,
         minterRoleAdmin,
-        checkExpiry,
+        getExpiry,
         totalSupply,
         checkAuthenticity,
         getTokenUri,
@@ -367,7 +390,8 @@ export const WarrantyCardProvider = ({ children }) => {
         issueWarrantyCard,
         pinFile,
         serviceProvider,
-        serviceProviderAdmin
+        serviceProviderAdmin,
+        incServiceCount
       }}
     >
       {children}

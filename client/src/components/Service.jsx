@@ -3,7 +3,11 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useContext } from "react";
+import { WarrantyCardContext } from "../context/WarrantyCardContext";
+
 const Approve = () => {
+  const { incServiceCount } = useContext(WarrantyCardContext);
   const [tokenID, settokenID] = useState("");
 
   const validateAddress = (address) => {
@@ -14,7 +18,7 @@ const Approve = () => {
     const regex = new RegExp("^[1-9][0-9]*$");
     return regex.test(bigInt);
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateBigInt(tokenID)) {
       toast.warning("Not a valid address", {
@@ -27,7 +31,8 @@ const Approve = () => {
         progress: undefined,
       });
     } else {
-      console.log(tokenID);
+      let res = await incServiceCount(tokenID);
+      console.log(res);
     }
   };
   return (

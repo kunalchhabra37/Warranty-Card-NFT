@@ -6,11 +6,12 @@ import { WarrantyCardContext } from "../context/WarrantyCardContext";
 const CheckExpiry = () => {
   const [tokenID, setTokenId] = useState("");
 
-  const { checkExpiry } = useContext(WarrantyCardContext);
+  const { getExpiry } = useContext(WarrantyCardContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let res = await checkExpiry(tokenID);
+    let res = await getExpiry(tokenID);
+    res = (new Date(res*1000)).toString();
     console.log(res);
   };
   return (

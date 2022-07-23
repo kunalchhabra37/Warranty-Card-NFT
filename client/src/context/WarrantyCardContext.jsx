@@ -1,9 +1,14 @@
 import { createContext, useEffect, useState } from "react";
 import { BigNumber, ethers } from "ethers";
 import axios from "axios";
-import { contractAbi, contractAddress, PINATA_API_KEY, PINATA_SECRET_API_KEY } from "../utils/constants";
-import pinataConfig from '../utils/pinataConfig.json';
-import WarrantyCard2 from '../utils/WarrantyCard2.json';
+import {
+  contractAbi,
+  contractAddress,
+  PINATA_API_KEY,
+  PINATA_SECRET_API_KEY,
+} from "../utils/constants";
+import pinataConfig from "../utils/pinataConfig.json";
+import WarrantyCard2 from "../utils/WarrantyCard2.json";
 export const WarrantyCardContext = createContext();
 
 const { ethereum } = window;
@@ -55,11 +60,8 @@ export const WarrantyCardProvider = ({ children }) => {
       } else {
         return console.log("No account found");
       }
-      // console.log(accounts);
+
     } catch (err) {
-      // if(err.Error == 'unknown account #0 '){
-      //   console
-      // }
       console.log(err.Error);
       throw "No ethereum object found or metamask not installed";
     }
@@ -93,8 +95,8 @@ export const WarrantyCardProvider = ({ children }) => {
       let { contract, wallet, provider } = await getContract();
       return await (await contract.getExpiryDate(tokenID)).toNumber();
     } catch (err) {
-      if (err.reason == "Token is Expired") {
-        return "Token is Expired";
+      if (err.reason == "ERC721: invalid token ID") {
+        return { error: "Token don't exist: Expired or Id never existed" };
       }
       console.log(err);
       throw "No ethereum object found or metamask not installed";
@@ -121,9 +123,9 @@ export const WarrantyCardProvider = ({ children }) => {
       return await contract.checkAuthenticity(address, tokenID, serialNo);
     } catch (err) {
       if (err.reason == "Address is not the Owner of token") {
-        return "Address is not the Owner of token";
-      } else if (err.reason == "Token is Expired") {
-        return "Token is Expired";
+        return { error: "Address is not the Owner of token" };
+      } else if (err.reason == "ERC721: invalid token ID") {
+        return { error: "Token don't exist: Expired or Id never existed" };
       }
       console.log(err);
       throw "No ethereum object found or metamask not installed";
@@ -136,6 +138,9 @@ export const WarrantyCardProvider = ({ children }) => {
       let { contract, wallet, provider } = await getContract();
       return await contract.tokenURI(tokenID);
     } catch (err) {
+      if (err.reason == "ERC721: invalid token ID") {
+        return { error: "Token don't exist: Expired or Id never existed" };
+      }
       console.log(err);
       throw "No ethereum object found or metamask not installed";
     }
@@ -204,13 +209,13 @@ export const WarrantyCardProvider = ({ children }) => {
       let contractWithSigner = await contract.connect(wallet);
       if (role == "MINTER_ROLE") {
         role = await contract.MINTER_ROLE();
-      }else if (role == "MINTER_ADMIN") {
+      } else if (role == "MINTER_ADMIN") {
         role = await contract.MINTER_ADMIN();
-      }else if(role == "SERVICE_PROVIDER"){
+      } else if (role == "SERVICE_PROVIDER") {
         role = await contract.SERVICE_PROVIDER();
-      }else if(role == "SERVICE_PROVIDER_ADMIN"){
+      } else if (role == "SERVICE_PROVIDER_ADMIN") {
         role = await contract.SERVICE_PROVIDER_ADMIN();
-      }else {
+      } else {
         return "Role Not Found";
       }
       let txn = await contractWithSigner.grantRole(role, address);
@@ -234,11 +239,11 @@ export const WarrantyCardProvider = ({ children }) => {
         role = await contract.MINTER_ROLE();
       } else if (role == "MINTER_ADMIN") {
         role = await contract.MINTER_ADMIN();
-      } else if(role == "SERVICE_PROVIDER"){
+      } else if (role == "SERVICE_PROVIDER") {
         role = await contract.SERVICE_PROVIDER();
-      }else if(role == "SERVICE_PROVIDER_ADMIN"){
+      } else if (role == "SERVICE_PROVIDER_ADMIN") {
         role = await contract.SERVICE_PROVIDER_ADMIN();
-      }else {
+      } else {
         return "Role Not found";
       }
       let txn = await contractWithSigner.revokeRole(role, address);
@@ -267,8 +272,8 @@ export const WarrantyCardProvider = ({ children }) => {
         hash: txn.hash,
       };
     } catch (err) {
-      if (err.reason == "Token is Expired") {
-        return "Token is Expired";
+      if (err.reason == "ERC721: invalid token ID") {
+        return { error: "Token don't exist: Expired or Id never existed" };
       }
       console.log(err);
       throw "No ethereum object found or metamask not installed";
@@ -287,8 +292,8 @@ export const WarrantyCardProvider = ({ children }) => {
         hash: txn.hash,
       };
     } catch (err) {
-      if (err.reason == "Token is Expired") {
-        return "Token is Expired";
+      if (err.reason == "ERC721: invalid token ID") {
+        return { error: "Token don't exist: Expired or Id never existed" };
       }
       console.log(err);
       throw "No ethereum object found or metamask not installed";
@@ -331,24 +336,23 @@ export const WarrantyCardProvider = ({ children }) => {
     },
     data: "",
   };
-  
+
   const pinFile = async (
-      to,
-      name,
-      description,
-      serialNo,
-      product_Id,
-      invoice_no,
-      payment_gateway,
-      platform,
-      purchase_date,
-      transaction_id,
-      transaction_method,
-      warranty_period,
-      attributes
+    to,
+    name,
+    description,
+    serialNo,
+    product_Id,
+    invoice_no,
+    payment_gateway,
+    platform,
+    purchase_date,
+    transaction_id,
+    transaction_method,
+    warranty_period,
+    attributes
   ) => {
     try {
-      console.log(1);
       WarrantyCard2.name = name;
       WarrantyCard2.description = description;
       WarrantyCard2.serial_no = serialNo;
@@ -362,9 +366,8 @@ export const WarrantyCardProvider = ({ children }) => {
       WarrantyCard2.warranty_period = warranty_period;
       WarrantyCard2.attributes = attributes;
       pinataConfig.pinataContent = WarrantyCard2;
-    
+
       config.data = JSON.stringify(pinataConfig);
-      console.log(2);
       let response = await axios(config);
       console.log(response.data);
       return response.data.IpfsHash;
@@ -391,7 +394,7 @@ export const WarrantyCardProvider = ({ children }) => {
         pinFile,
         serviceProvider,
         serviceProviderAdmin,
-        incServiceCount
+        incServiceCount,
       }}
     >
       {children}

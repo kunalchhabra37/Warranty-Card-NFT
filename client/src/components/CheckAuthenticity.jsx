@@ -13,7 +13,11 @@ const CheckAuthenticity = () => {
         
         e.preventDefault();
         let res = await checkAuthenticity(to, tokenID, serialNo);
-        console.log(res)        
+        if(res.hasOwnProperty('error')){
+          console.log(res.error);
+        }else{
+          console.log(res)        
+        }
   };
   return (
     <div className="container1">

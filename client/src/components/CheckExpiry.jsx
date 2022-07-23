@@ -11,9 +11,14 @@ const CheckExpiry = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     let res = await getExpiry(tokenID);
-    res = (new Date(res*1000)).toString();
-    console.log(res);
+    if(res.hasOwnProperty('error')){
+      console.log(res.error);
+    }else{
+      res = (new Date(res*1000)).toString();
+      console.log(res);
+    }
   };
+
   return (
     <div className="container1">
       <h1>Check Expiry</h1>

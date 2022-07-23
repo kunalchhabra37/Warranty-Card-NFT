@@ -32,7 +32,11 @@ const Approve = () => {
       });
     } else {
       let res = await incServiceCount(tokenID);
+      if(res.hasOwnProperty('error')){
+        console.log(res.error);
+      }else{
       console.log(res);
+      }
     }
   };
   return (

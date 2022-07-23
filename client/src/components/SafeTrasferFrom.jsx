@@ -14,7 +14,11 @@ const { transferWarrantyCard } = useContext(WarrantyCardContext);
         
         e.preventDefault();
         let res = await transferWarrantyCard(from, to , tokenID);
-        console.log(res);
+        if(res.hasOwnProperty('error')){
+          console.log(res.error);
+        }else{
+          console.log(res);
+        }
   };
   return (
     <div className="container1">

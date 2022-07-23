@@ -5,7 +5,7 @@ import { WarrantyCardContext } from "../context/WarrantyCardContext";
 
 const CheckExpiry = () => {
   const [tokenID, setTokenId] = useState("");
-
+  const [res, setRes] = useState(false);
   const { getExpiry } = useContext(WarrantyCardContext);
 
   const handleSubmit = async (e) => {
@@ -16,10 +16,12 @@ const CheckExpiry = () => {
     }else{
       res = (new Date(res*1000)).toString();
       console.log(res);
+      setRes(res);
     }
   };
 
   return (
+    <>
     <div className="container1">
       <h1>Check Expiry</h1>
       <Form>
@@ -37,6 +39,8 @@ const CheckExpiry = () => {
         </Button>
       </Form>
     </div>
+    {res && <p className="text-white"> {res} </p>}
+    </>
   );
 };
 

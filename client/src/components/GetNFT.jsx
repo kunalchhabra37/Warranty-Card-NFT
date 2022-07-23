@@ -6,6 +6,7 @@ import { WarrantyCardContext } from "../context/WarrantyCardContext";
 const GetNFT = () => {
   const { getTokenUri } = useContext(WarrantyCardContext);
   const [tokenID, settokenID] = useState("");
+  const [res, setRes] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -14,9 +15,11 @@ const GetNFT = () => {
           console.log(res.error);
         }else{
           console.log(res)
+          setRes(res);
         }
   };
   return (
+    <>
     <div className="container1">
       <h1>Get Warranty Card</h1>
       <Form>
@@ -34,6 +37,8 @@ const GetNFT = () => {
         </Button>
       </Form>
     </div>
+    {res && <p className="text-white"> {res} </p>}
+    </>
   );
 };
 

@@ -7,14 +7,21 @@ const RevokeRole = () => {
   const { revokeRoles } = useContext(WarrantyCardContext);
   const [to, setTo] = useState("");
   const [role, setRole] = useState("");
+  const [res, setRes] = useStete(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(role, to);
     let res = await revokeRoles(role, to);
-    console.log(res);
+    if(res.hasOwnProperty('error')){
+      console.log(res.error);
+    }else{
+      console.log(res);
+      setRes(res);
+    }
   };
   return (
+    <>
     <div className="container1">
       <h1>Revoke Role</h1>
       <Form>
@@ -49,6 +56,8 @@ const RevokeRole = () => {
         </Button>
       </Form>
     </div>
+    {res && <p className="text-white"> {`${res.msg} at hash: ${res.hash}`} </p>}
+    </>
   );
 };
 

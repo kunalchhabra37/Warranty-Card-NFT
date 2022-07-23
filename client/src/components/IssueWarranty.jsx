@@ -20,6 +20,7 @@ const IssueWarranty = () => {
   const [transaction_method, setTransaction_method] = useState("");
   const [warranty_period, setWarranty_period] = useState("");
   const [attributes, setAttributes] = useState([]);
+  const [res, setRes] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,9 +47,28 @@ const IssueWarranty = () => {
       serialNo,
       warranty_period
     );
-    console.log(res);
+    if(res.hasOwnProperty('error')){
+      console.log(res.error);
+    }else{
+      console.log(res);
+      setRes(res)
+      setTo('');
+      setName('');
+      setDescription('');
+      setSerialNo('');
+      setProduct_Id('');
+      setInvoice_no('');
+      setPayment_gateway('');
+      setPlatform('');
+      setPurchase_date('');
+      setTransaction_id('');
+      setTransaction_method('');
+      setWarranty_period('');
+      setAttributes([]);
+    }
   };
   return (
+    <>
     <div className="container1 mt-3">
       <h1>Issue Warranty</h1>
       <Form>
@@ -174,7 +194,12 @@ const IssueWarranty = () => {
           Issue
         </Button>
       </Form>
+      
     </div>
+    {res && <><p className="text-white">
+        {`${res.msg} at hash: ${res.hash}`}
+      </p></>}
+    </>
   );
 };
 

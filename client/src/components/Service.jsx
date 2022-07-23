@@ -9,6 +9,7 @@ import { WarrantyCardContext } from "../context/WarrantyCardContext";
 const Approve = () => {
   const { incServiceCount } = useContext(WarrantyCardContext);
   const [tokenID, settokenID] = useState("");
+  const [res, setRes] = useState(false);
 
   const validateAddress = (address) => {
     const regex = new RegExp("^0x[a-fA-F0-9]{40}$");
@@ -36,10 +37,12 @@ const Approve = () => {
         console.log(res.error);
       }else{
       console.log(res);
+      setRes(res)
       }
     }
   };
   return (
+    <>
     <div className="container1">
       <h1>Increase Service Count</h1>
       <Form>
@@ -57,6 +60,10 @@ const Approve = () => {
         </Button>
       </Form>
     </div>
+    {res && <p className="text-white">
+      {`${res.msg} at ${res.hash}`}
+      </p>}
+    </>
   );
 };
 export default Approve;

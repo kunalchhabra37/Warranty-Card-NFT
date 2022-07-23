@@ -8,7 +8,7 @@ const CheckAuthenticity = () => {
   const [to, setTo] = useState ("");
   const [tokenID, settokenID] = useState("");
   const [serialNo, setSerialNo] = useState("");
-
+  const [res, setRes] = useState(false)
     const handleSubmit = async (e) => {
         
         e.preventDefault();
@@ -16,10 +16,12 @@ const CheckAuthenticity = () => {
         if(res.hasOwnProperty('error')){
           console.log(res.error);
         }else{
-          console.log(res)        
+          console.log(res) 
+          setRes(false)       
         }
   };
   return (
+    <>
     <div className="container1">
       <h1>Check Authenticity</h1>
       <Form>
@@ -55,6 +57,8 @@ const CheckAuthenticity = () => {
         </Button>
       </Form>
     </div>
+    {res && <p className="text-white"> {res} </p>}
+    </>
   );
 };
 export default CheckAuthenticity

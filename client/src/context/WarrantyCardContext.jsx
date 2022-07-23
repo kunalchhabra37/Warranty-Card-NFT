@@ -36,10 +36,6 @@ export const WarrantyCardProvider = ({ children }) => {
   useEffect(() => {
     checkWalletConnected();
     getTotalSupply();
-    // hasMinterRole();
-    // hasMinterRoleAdmin();
-    // hasServiceProvider();
-    // hasServiceProviderAdmin();
   }, []);
 
   // Runs on page load to check if connected wallet is present
@@ -51,7 +47,6 @@ export const WarrantyCardProvider = ({ children }) => {
       if (accounts.length) {
         setConnectedWallet(accounts[0]);
         addressConnect = accounts[0];
-        // console.log(addressConnect);
         await getTotalSupply();
         await hasMinterRole();
         await hasMinterRoleAdmin();
@@ -60,7 +55,6 @@ export const WarrantyCardProvider = ({ children }) => {
       } else {
         return console.log("No account found");
       }
-
     } catch (err) {
       console.log(err.Error);
       throw "No ethereum object found or metamask not installed";
@@ -88,7 +82,7 @@ export const WarrantyCardProvider = ({ children }) => {
     }
   };
 
-  // Check Expiry of Warranty Card
+  // Check Expiry of Warranty Card(non payable)
   const getExpiry = async (tokenID) => {
     try {
       if (!ethereum) return alert("Please Install to MetaMask");
@@ -103,6 +97,7 @@ export const WarrantyCardProvider = ({ children }) => {
     }
   };
 
+  // Gets total number of active tokens in contract (non payable)
   const getTotalSupply = async () => {
     try {
       if (!ethereum) return alert("Please Install to MetaMask");
@@ -115,6 +110,7 @@ export const WarrantyCardProvider = ({ children }) => {
     }
   };
 
+  // Checks Ownership and serial No. of Product to Prove authenticity and ownership (non Paybale)
   const checkAuthenticity = async (address, tokenID, serialNo) => {
     try {
       if (!ethereum) return alert("Please Install to MetaMask");
@@ -132,6 +128,7 @@ export const WarrantyCardProvider = ({ children }) => {
     }
   };
 
+  // Gets Token URI (non payable)
   const getTokenUri = async (tokenID) => {
     try {
       if (!ethereum) return alert("Please Install to MetaMask");
@@ -146,6 +143,7 @@ export const WarrantyCardProvider = ({ children }) => {
     }
   };
 
+  // Checks if connected wallet is MINTER_ROLE  (non payable)
   const hasMinterRole = async () => {
     try {
       if (!ethereum) return alert("Please Install to MetaMask");
@@ -160,6 +158,7 @@ export const WarrantyCardProvider = ({ children }) => {
     }
   };
 
+  // Checks if connected wallet is MINTER_ROLE_ADMIN  (non payable)
   const hasMinterRoleAdmin = async () => {
     try {
       if (!ethereum) return alert("Please Install to MetaMask");
@@ -174,6 +173,7 @@ export const WarrantyCardProvider = ({ children }) => {
     }
   };
 
+  // Checks if connected wallet is SERVICE_PROVIDER  (non payable)
   const hasServiceProvider = async () => {
     try {
       if (!ethereum) return alert("Please Install to MetaMask");
@@ -188,6 +188,7 @@ export const WarrantyCardProvider = ({ children }) => {
     }
   };
 
+  // Checks if connected wallet is SERVICE_PROVIDER_ADMIN  (non payable)
   const hasServiceProviderAdmin = async () => {
     try {
       if (!ethereum) return alert("Please Install to MetaMask");
@@ -202,6 +203,7 @@ export const WarrantyCardProvider = ({ children }) => {
     }
   };
 
+  // Role admins can grant respective roles (payable)
   const grantRoles = async (role, address) => {
     try {
       if (!ethereum) return alert("Please install Metamask");
@@ -230,6 +232,7 @@ export const WarrantyCardProvider = ({ children }) => {
     }
   };
 
+  // Role admin can revoke respective role (payable)
   const revokeRoles = async (role, address) => {
     try {
       if (!ethereum) return alert("Please install Metamask");
@@ -258,6 +261,7 @@ export const WarrantyCardProvider = ({ children }) => {
     }
   };
 
+  // Warranty Card owner can transfer their warranty card to any other address (payable)
   const transferWarrantyCard = async (from, to, tokenID) => {
     try {
       if (!ethereum) return alert("Please install Metamask");
@@ -280,6 +284,7 @@ export const WarrantyCardProvider = ({ children }) => {
     }
   };
 
+  // SERVICE_PROVIDER can increase service count of any active token (payable)
   const incServiceCount = async (tokenID) => {
     try {
       if (!ethereum) return alert("Please install Metamask");
@@ -300,6 +305,7 @@ export const WarrantyCardProvider = ({ children }) => {
     }
   };
 
+  // MINTER_ROLE address can mint and issue warranty card to any address (payable)
   const issueWarrantyCard = async (
     address,
     tokenURI,
@@ -326,17 +332,8 @@ export const WarrantyCardProvider = ({ children }) => {
       throw "No ethereum object found or metamask not installed";
     }
   };
-  let config = {
-    method: "post",
-    url: "https://api.pinata.cloud/pinning/pinJSONToIPFS",
-    headers: {
-      "Content-Type": "application/json",
-      pinata_api_key: PINATA_API_KEY,
-      pinata_secret_api_key: PINATA_SECRET_API_KEY,
-    },
-    data: "",
-  };
 
+  // Pin JSON file to ipfs usin PINATA API
   const pinFile = async (
     to,
     name,
@@ -352,6 +349,20 @@ export const WarrantyCardProvider = ({ children }) => {
     warranty_period,
     attributes
   ) => {
+
+    // Configration for the api call
+    let config = {
+      method: "post",
+      url: "https://api.pinata.cloud/pinning/pinJSONToIPFS",
+      headers: {
+        "Content-Type": "application/json",
+        pinata_api_key: PINATA_API_KEY,
+        pinata_secret_api_key: PINATA_SECRET_API_KEY,
+      },
+      data: "",
+    };
+
+    // Creating json and calling api to pin json
     try {
       WarrantyCard2.name = name;
       WarrantyCard2.description = description;
@@ -376,6 +387,8 @@ export const WarrantyCardProvider = ({ children }) => {
       throw err;
     }
   };
+
+  // Context Provider
   return (
     <WarrantyCardContext.Provider
       value={{

@@ -7,15 +7,21 @@ const GrantRole = () => {
   const { grantRoles } = useContext(WarrantyCardContext);
   const [to, setTo] = useState("");
   const [role, setRole] = useState("");
+  const [res, setRes] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(to, role);
     let res = await grantRoles(role, to);
-    console.log(to, role);
-    console.log(res);
+    if(res.hasOwnProperty('error')){
+      console.log(res.error);
+    }else{
+      console.log(res);
+      setRes(res);
+    }
   };
   return (
+    <>
     <div className="container1">
       <h1>Grant Role</h1>
       <Form>
@@ -50,6 +56,8 @@ const GrantRole = () => {
         </Button>
       </Form>
     </div>
+    {res && <p className="text-white"> {`${res.msg} at hash: ${res.hash}`} </p>}
+    </>
   );
 };
 

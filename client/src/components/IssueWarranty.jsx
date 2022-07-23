@@ -49,6 +49,15 @@ const IssueWarranty = () => {
     );
     if(res.hasOwnProperty('error')){
       console.log(res.error);
+      toast.warning(res.error, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }else{
       console.log(res);
       setRes(res)

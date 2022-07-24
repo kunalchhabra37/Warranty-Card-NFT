@@ -3,8 +3,8 @@ import "./nft.css";
 const ViewNFT = () => {
   return (
     <div className="nft-container">
-      <div class="container2">
-        <article class="main-image">
+      <div className="container2">
+        <article className="main-image">
           <img src="" alt="hi" />
         </article>
 
@@ -14,10 +14,9 @@ const ViewNFT = () => {
 
           <ul>
             <li>1 ETH</li>
-                      <li>2 days left</li>
-                      
+            <li>2 days left</li>
           </ul>
-                  <ul>
+          <ul>
             <li> hi</li>
           </ul>
         </article>

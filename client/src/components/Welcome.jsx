@@ -1,12 +1,14 @@
-import { useContext } from "react";
+import { useContext,useState } from "react";
 import { WarrantyCardContext } from "../context/WarrantyCardContext";
 import Button from "./Button";
 
 const Welcome = () => {
   const { connectWallet, connectedWallet, totalSupply } =
     useContext(WarrantyCardContext);
+  const [res, setRes] = useState(false);
   const getTotalSupply = async() => {
     console.log(totalSupply);
+    setRes(totalSupply);
   } 
   return (
     <div>
@@ -33,6 +35,7 @@ const Welcome = () => {
           />
         </p>
       )}
+      {res && <p className="text-white">Total Supply is: {res}</p>}
     </div>
   );
 };

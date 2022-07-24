@@ -18,10 +18,12 @@ const IssueWarranty = () => {
   const [purchase_date, setPurchase_date] = useState(new Date());
   const [transaction_id, setTransaction_id] = useState("");
   const [transaction_method, setTransaction_method] = useState("");
-  const [warranty_period, setWarranty_period] = useState("");
+  const [warranty_period, setWarranty_period] = useState(new Date());
   const [attributes, setAttributes] = useState([]);
   const [res, setRes] = useState(false);
-
+  const convertTime = (date) => {
+    return Math.floor(new Date(warranty_period) / 1000);
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
     let hash = await pinFile(
@@ -33,10 +35,10 @@ const IssueWarranty = () => {
       invoice_no,
       payment_gateway,
       platform,
-      purchase_date,
+      convertTime(purchase_date),
       transaction_id,
       transaction_method,
-      warranty_period,
+      convertTime(warranty_period),
       attributes
     );
     console.log(hash);
@@ -45,7 +47,7 @@ const IssueWarranty = () => {
       to,
       hash,
       serialNo,
-      warranty_period
+      convertTime(warranty_period)
     );
     if(res.hasOwnProperty('error')){
       console.log(res.error);
@@ -75,6 +77,7 @@ const IssueWarranty = () => {
       setWarranty_period('');
       setAttributes([]);
     }
+    // console.log(convertTime(purchase_date),convertTime(warranty_period));
   };
   return (
     <>
@@ -181,12 +184,12 @@ const IssueWarranty = () => {
           />
         </Form.Group>
         <Form.Group className="mb-3 ctrl">
-          <Form.Label>Warranty Period</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter warranty_period"
-            value={warranty_period}
-            onChange={(e) => setWarranty_period(e.target.value)}
+            <Form.Label>Warranty Period</Form.Label>
+            <DatePicker
+            selected={warranty_period}
+            onChange={(date) => setWarranty_period(date)}
+            dateFormat="MM/dd/yyyy"
+            placeholderText="Enter warranty_period"
           />
         </Form.Group>
         <Form.Group className="mb-3 ctrl">

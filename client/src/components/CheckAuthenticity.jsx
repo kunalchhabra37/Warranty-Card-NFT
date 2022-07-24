@@ -2,18 +2,42 @@ import { useState, useContext } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { WarrantyCardContext } from "../context/WarrantyCardContext";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { validateBigInt,validateAddress } from "./Validation";
 const CheckAuthenticity = () => {
   const { checkAuthenticity } = useContext(WarrantyCardContext);
   const [to, setTo] = useState ("");
   const [tokenID, settokenID] = useState("");
   const [serialNo, setSerialNo] = useState("");
   const [res, setRes] = useState(false)
-    const handleSubmit = async (e) => {
-        
-        e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+      if (!validateAddress(to)) {
+        toast.warning("Not a valid address", {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+      else if (!validateBigInt(tokenID)) {
+        toast.warning("Not a valid tokenID", {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+      else {
         let res = await checkAuthenticity(to, tokenID, serialNo);
-        if(res.hasOwnProperty('error')){
+        if (res.hasOwnProperty('error')) {
           console.log(res.error);
           toast.warning(res.error, {
             position: "top-right",
@@ -24,13 +48,14 @@ const CheckAuthenticity = () => {
             draggable: true,
             progress: undefined,
           });
-        }else{
-          console.log(res) 
-          setRes(res)       
+        } else {
+          console.log(res)
+          setRes(res)
           setTo('')
           setSerialNo('')
           settokenID('')
         }
+      }
   };
   return (
     <>

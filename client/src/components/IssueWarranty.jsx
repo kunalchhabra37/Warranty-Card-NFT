@@ -5,6 +5,9 @@ import { WarrantyCardContext } from "../context/WarrantyCardContext";
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { validateBigInt,validateAddress } from "./Validation";
 const IssueWarranty = () => {
   const { issueWarrantyCard,pinFile } = useContext(WarrantyCardContext);
   const [to, setTo] = useState("");
@@ -26,32 +29,8 @@ const IssueWarranty = () => {
   }
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let hash = await pinFile(
-      to,
-      name,
-      description,
-      serialNo,
-      product_Id,
-      invoice_no,
-      payment_gateway,
-      platform,
-      convertTime(purchase_date),
-      transaction_id,
-      transaction_method,
-      convertTime(warranty_period),
-      attributes
-    );
-    console.log(hash);
-
-    let res = await issueWarrantyCard(
-      to,
-      hash,
-      serialNo,
-      convertTime(warranty_period)
-    );
-    if(res.hasOwnProperty('error')){
-      console.log(res.error);
-      toast.warning(res.error, {
+    if (!validateAddress(to)) {
+      toast.warning("Not a valid Address", {
         position: "top-right",
         autoClose: 4000,
         hideProgressBar: false,
@@ -60,22 +39,59 @@ const IssueWarranty = () => {
         draggable: true,
         progress: undefined,
       });
-    }else{
-      console.log(res);
-      setRes(res)
-      setTo('');
-      setName('');
-      setDescription('');
-      setSerialNo('');
-      setProduct_Id('');
-      setInvoice_no('');
-      setPayment_gateway('');
-      setPlatform('');
-      setPurchase_date('');
-      setTransaction_id('');
-      setTransaction_method('');
-      setWarranty_period('');
-      setAttributes([]);
+    }
+    else {
+      let hash = await pinFile(
+        to,
+        name,
+        description,
+        serialNo,
+        product_Id,
+        invoice_no,
+        payment_gateway,
+        platform,
+        convertTime(purchase_date),
+        transaction_id,
+        transaction_method,
+        convertTime(warranty_period),
+        attributes
+      );
+      console.log(hash);
+
+      let res = await issueWarrantyCard(
+        to,
+        hash,
+        serialNo,
+        convertTime(warranty_period)
+      );
+      if (res.hasOwnProperty('error')) {
+        console.log(res.error);
+        toast.warning(res.error, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } else {
+        console.log(res);
+        setRes(res)
+        setTo('');
+        setName('');
+        setDescription('');
+        setSerialNo('');
+        setProduct_Id('');
+        setInvoice_no('');
+        setPayment_gateway('');
+        setPlatform('');
+        setPurchase_date('');
+        setTransaction_id('');
+        setTransaction_method('');
+        setWarranty_period('');
+        setAttributes([]);
+      }
     }
     // console.log(convertTime(purchase_date),convertTime(warranty_period));
   };

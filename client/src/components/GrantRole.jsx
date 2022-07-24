@@ -2,7 +2,9 @@ import { useState, useContext } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { WarrantyCardContext } from "../context/WarrantyCardContext";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import {validateAddress } from "./Validation";
 const GrantRole = () => {
   const { grantRoles } = useContext(WarrantyCardContext);
   const [to, setTo] = useState("");
@@ -11,11 +13,8 @@ const GrantRole = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(to, role);
-    let res = await grantRoles(role, to);
-    if(res.hasOwnProperty('error')){
-      console.log(res.error);
-      toast.warning(res.error, {
+    if (!validateAddress(to)) {
+      toast.warning("Not a valid address", {
         position: "top-right",
         autoClose: 4000,
         hideProgressBar: false,
@@ -24,11 +23,26 @@ const GrantRole = () => {
         draggable: true,
         progress: undefined,
       });
-    }else{
-      console.log(res);
-      setRes(res);
-      setRole("");
-      setTo('');
+    } else {
+      console.log(to, role);
+      let res = await grantRoles(role, to);
+      if (res.hasOwnProperty('error')) {
+        console.log(res.error);
+        toast.warning(res.error, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } else {
+        console.log(res);
+        setRes(res);
+        setRole("");
+        setTo('');
+      }
     }
   };
   return (
@@ -54,7 +68,7 @@ const GrantRole = () => {
             custom
             onChange={(e) => setRole(e.target.value)}
           >
-            <option value="">Select Role</option>
+            <option value="" disabled>Select Role</option>
             <option value="MINTER_ROLE">Minter Role</option>
             <option value="MINTER_ADMIN">Minter Admin</option>
             <option value="SERVICE_PROVIDER">Service Provider</option>

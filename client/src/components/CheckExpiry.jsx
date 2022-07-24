@@ -2,7 +2,9 @@ import { useState, useContext } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { WarrantyCardContext } from "../context/WarrantyCardContext";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { validateBigInt } from "./Validation";
 const CheckExpiry = () => {
   const [tokenID, setTokenId] = useState("");
   const [res, setRes] = useState(false);
@@ -10,10 +12,8 @@ const CheckExpiry = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let res = await getExpiry(tokenID);
-    if(res.hasOwnProperty('error')){
-      console.log(res.error);
-      toast.warning(res.error, {
+    if (!validateBigInt(tokenID)) {
+      toast.warning("Not a valid TokenId", {
         position: "top-right",
         autoClose: 4000,
         hideProgressBar: false,
@@ -22,11 +22,25 @@ const CheckExpiry = () => {
         draggable: true,
         progress: undefined,
       });
-    }else{
-      res = (new Date(res*1000)).toString();
-      console.log(res);
-      setRes(res);
-      setTokenId('')
+    } else {
+      let res = await getExpiry(tokenID);
+      if (res.hasOwnProperty('error')) {
+        console.log(res.error);
+        toast.warning(res.error, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } else {
+        res = (new Date(res * 1000)).toString();
+        console.log(res);
+        setRes(res);
+        setTokenId('')
+      }
     }
   };
 

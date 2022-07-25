@@ -12,7 +12,6 @@ const GetNFT = () => {
   const [tokenID, settokenID] = useState("");
   const [res, setRes] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [url,setURL]=useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
     setRes(false);
@@ -43,7 +42,6 @@ const GetNFT = () => {
         });
       } else {
         console.log(res);
-        setUrl(res);
         setRes(res);
         settokenID("");
       }
@@ -71,7 +69,7 @@ const GetNFT = () => {
           ) : (
             <Button variant="primary" type="submit" onClick={handleSubmit}>
             Get
-          </Button>
+            </Button>
           )}
           
         </Form>

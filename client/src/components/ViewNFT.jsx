@@ -1,10 +1,14 @@
 import React from "react";
 import "./nft.css";
 const ViewNFT = (props) => {
-  const url=props.url;
-  console.log(1);
-  console.log(url);
-  console.log(2);
+  const url = props.url;
+  async function getapi(url) {
+    const response = await fetch(url);
+    var data = await response.json();
+    console.log(data.name);
+}
+// Calling that async function
+getapi(url);
   return (
     <div className="nft-container">
       <div className="container2">
@@ -13,7 +17,7 @@ const ViewNFT = (props) => {
         </article>
 
         <article>
-          <h2>Dragon Box #1000</h2>
+          <h2>{data.name}</h2>
           <p>Power to Create New Power to Balance The Universe.</p>
 
           <ul>

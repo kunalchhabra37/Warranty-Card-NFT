@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config();
 const { ethers } = require("ethers");
 
 const { CONTRACT_ADDRESS, WALLET_PRIVATE_KEY, PROVIDER_URL } = process.env;
@@ -14,7 +14,7 @@ const wallet = new ethers.Wallet(WALLET_PRIVATE_KEY, provider);
 const issueWarrantyCard = async (address, tokenUri, serialNo, warrantyEnd) => {
   try {
     const nonce = await provider.getTransactionCount(wallet.address, "latest");
-    console.log(nonce)
+    console.log(nonce);
     let gasFee = await provider.getFeeData();
     gasFee = gasFee.gasPrice;
     console.log(gasFee);
@@ -26,7 +26,7 @@ const issueWarrantyCard = async (address, tokenUri, serialNo, warrantyEnd) => {
       {
         nonce: nonce,
         gasLimit: 500000,
-        gasPrice: gasFee
+        gasPrice: gasFee,
         // maxFeePerGas: 1000,
         // maxPriorityFeePerGas: 1000,
       }
@@ -47,15 +47,20 @@ const issueWarrantyCard = async (address, tokenUri, serialNo, warrantyEnd) => {
           (await signedTxn).hash,
         "to see your transaction"
       );
-      return (await signedTxn).hash;
+      let tokenId = await (await contractInstance.getTokenIdBySerialNo(serialNo)).toNumber();
+      let hash = (await signedTxn).hash;
+      return { hash, tokenId };
     } else {
       console.log("Error submitting transaction");
-      return "Error submitting transaction";
+      return {error: "Error submitting transaction"};
     }
   } catch (err) {
+    if(err.reason == "Serial Number Already Exists"){
+      return {error: err.reason}
+    }
     console.log("err \n\n\n");
     console.log(err);
-    return err;
+    return {error: err};
   }
 };
 
@@ -75,4 +80,4 @@ const issueWarrantyCard = async (address, tokenUri, serialNo, warrantyEnd) => {
 // };
 
 // main();
-module.exports =  issueWarrantyCard ;
+module.exports = issueWarrantyCard;

@@ -226,7 +226,9 @@ const IssueWarranty = () => {
     </div>
     {res && <><p className="text-white">
         {`${res.msg} at hash: ${res.hash}`}
-      </p></>}
+      </p>
+      <p className="text-white">{`Token Id: ${res.tokenId}`}</p>
+      </>}
     </>
   );
 };

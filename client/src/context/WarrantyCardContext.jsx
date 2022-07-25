@@ -17,11 +17,11 @@ const getContract = async () => {
   const provider = new ethers.providers.Web3Provider(ethereum);
   const wallet = provider.getSigner();
   const contract = new ethers.Contract(contractAddress, contractAbi, wallet);
-  // console.log({
-  //   provider,
-  //   wallet,
-  //   contract,
-  // });
+  console.log({
+    provider,
+    wallet,
+    contract,
+  });
   return { contract, wallet, provider };
 };
 
@@ -122,6 +122,8 @@ export const WarrantyCardProvider = ({ children }) => {
         return { error: "Address is not the Owner of token" };
       } else if (err.reason == "ERC721: invalid token ID") {
         return { error: "Token don't exist: Expired or Id never existed" };
+      }else if(err.reason == "Token is expired"){
+        return { error: "Token Expired" }
       }
       console.log(err);
       throw "No ethereum object found or metamask not installed";
@@ -202,6 +204,17 @@ export const WarrantyCardProvider = ({ children }) => {
       throw "No ethereum object found or metamask not installed";
     }
   };
+
+  const getTokenId = async (serialNo) => {
+    try{
+      if(!ethereum) return alert("Please Install Metamask");
+      let { contract, wallet, provider } = await getContract();
+      return await (await contract.getTokenIdBySerialNo(serialNo)).toNumber();
+    }catch(err){
+      console.log(err);
+      throw "No ethereum object found or metamask not installed";
+    }
+  }
 
   // Role admins can grant respective roles (payable)
   const grantRoles = async (role, address) => {
@@ -323,11 +336,16 @@ export const WarrantyCardProvider = ({ children }) => {
         warrantyEnd
       );
       await txn.wait();
+      let tokenId = await (await contract.getTokenIdBySerialNo(serialNo)).toNumber();
       return {
         msg: "Transaction Succesful",
         hash: txn.hash,
+        tokenId
       };
     } catch (err) {
+      if(err.reason == "execution reverted: Serial Number Already Exists"){
+        return {error: "Serial Number Already Registered"}
+      }
       console.log(err);
       throw "No ethereum object found or metamask not installed";
     }
@@ -408,6 +426,7 @@ export const WarrantyCardProvider = ({ children }) => {
         serviceProvider,
         serviceProviderAdmin,
         incServiceCount,
+        getTokenId
       }}
     >
       {children}

@@ -10,6 +10,7 @@ import CheckExpiry from "./components/CheckExpiry";
 import SafeTrasferFrom from "./components/SafeTrasferFrom";
 import GetNFT from "./components/GetNFT";
 import ViewNFT from "./components/ViewNFT";
+import GetTokenId from "./components/getTokenId";
 import Unautherised from "./components/Unautherised";
 import { ToastContainer, toast } from "react-toastify";
 import "./App.css";
@@ -81,6 +82,10 @@ function App() {
             <Route
               path="check-expiry"
               element={connectedWallet ? <CheckExpiry /> : <Unautherised />}
+            ></Route>
+            <Route
+              path="get-token-id"
+              element={connectedWallet ? <GetTokenId /> : <Unautherised />}
             ></Route>
             <Route
               path="transfer"

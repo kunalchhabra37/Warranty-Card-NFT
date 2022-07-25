@@ -41,7 +41,10 @@ app.post("/api/mint/warrantyCard", async (req, res) => {
       req.body.serialNo,
       req.body.warrantyEnd
     );
-    return res.json({ result: mint });
+    if(res.hasOwnProperty("error")){
+      res.status(400).json(mint)
+    }
+    return res.json(mint);
     // return process.exit(0);
   } catch (err) {
     return res.status(500).send("Internal Server error");

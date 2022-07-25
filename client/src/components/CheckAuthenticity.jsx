@@ -53,6 +53,7 @@ const CheckAuthenticity = () => {
           draggable: true,
           progress: undefined,
         });
+      setLoading(false);
       } else {
         console.log(res);
         setRes(res);

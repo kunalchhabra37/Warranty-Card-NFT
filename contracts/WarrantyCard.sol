@@ -32,6 +32,9 @@ contract WarrantyCard is
     // Stores TokenIds of all active/notExpired Tokens
     uint256[] public activeTokenIds;
 
+    // Stores mapping of serial number to tokenId for unique Serial Numbers and fetching tokenID
+    mapping(string => uint256) serialNoToTokenId;
+
     // Roles
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     bytes32 public constant MINTER_ADMIN = keccak256("MINTER_ADMIN");
@@ -71,14 +74,20 @@ contract WarrantyCard is
         string memory _serialNo,
         uint64 _warrantyEnd
     ) public onlyMinters  {
+        require(!(serialNoToTokenId[_serialNo] > 0), "Serial Number Already Exists");
         uint256 tokenId = genrateId();
         safeMint(to, tokenId, _tokenUri);
 
         customerToWarrantyCards[to][tokenId] = warrantyCards( _serialNo, _warrantyEnd, 0);
 
         activeTokenIds.push(tokenId);
+        serialNoToTokenId[_serialNo] = tokenId;
     }
 
+    // Gets TokenId for particular Serial Number
+    function getTokenIdBySerialNo(string memory _serialNo) public view returns(uint256){
+        return serialNoToTokenId[_serialNo];
+    }
 
     // Check Authenticity and ownership of Product
     function checkAuthenticity(
@@ -105,10 +114,12 @@ contract WarrantyCard is
         return customerToWarrantyCards[ownerOf(tokenId)][tokenId].warrantyEnd;
     }
 
+    // returns length of activeTokenIds array
     function getActiveTokenIdsCount() public view returns (uint256){
         return activeTokenIds.length;
     }
 
+    // returns tokenId by index fro array activeTokenIds
     function getTokenId(uint256 index) public view returns(uint256){
         return activeTokenIds[index];
     }

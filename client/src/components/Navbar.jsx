@@ -27,6 +27,7 @@ function NavBar() {
               {/* Open to all Connected Wallet  */}
               <Nav.Link href="/check-authenticity">Check Authenticity</Nav.Link>
               <Nav.Link href="/check-expiry">Check Expiry</Nav.Link>
+              <Nav.Link href="/get-token-id">Get Token Id</Nav.Link>
               <Nav.Link href="/get-warranty-card">Get Warranty Card</Nav.Link>
               <Nav.Link href="/transfer">Transfer</Nav.Link>
               {/* Service Provider Only */}

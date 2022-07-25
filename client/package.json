@@ -16,6 +16,8 @@
     "react-calendar-icon": "^0.10.0",
     "react-datepicker": "^4.8.0",
     "react-dom": "^18.0.0",
+    "react-loader": "^2.4.7",
+    "react-loader-spinner": "^5.1.7-beta.1",
     "react-router-dom": "^6.3.0",
     "react-toastify": "^9.0.7"
   },

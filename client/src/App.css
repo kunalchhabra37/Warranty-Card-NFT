@@ -70,18 +70,21 @@
 }
 .brand-logo{
   font-size: 2rem;
-  margin-right: 1.2rem;
+  margin-right: 2rem;
   text-decoration: none;
   color: #fff;
+  text-align: center;
 }
 .brand-logo:hover{
   color: #fff;
 }
 .links {
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
+  font-size: 1rem;
+  margin-left: 0.7rem;
+  margin-right: 0.7rem;
   text-decoration: none;
   color: #808080;
+  text-align: center;
 }
 .links:hover{
   color: #fff;

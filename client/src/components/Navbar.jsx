@@ -2,6 +2,7 @@ import { useContext } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+import { Link } from "react-router-dom"
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Button from "./Button";
 import { WarrantyCardContext } from "../context/WarrantyCardContext";
@@ -19,29 +20,29 @@ function NavBar() {
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" sticky="top">
       <Container>
-        <Navbar.Brand href="/">Warranty Card</Navbar.Brand>
+        <Link to="/" className="brand-logo">Warranty Card</Link>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           {connectedWallet && (
             <Nav>
               {/* Open to all Connected Wallet  */}
-              <Nav.Link href="/check-authenticity">Check Authenticity</Nav.Link>
-              <Nav.Link href="/check-expiry">Check Expiry</Nav.Link>
-              <Nav.Link href="/get-token-id">Get Token Id</Nav.Link>
-              <Nav.Link href="/get-warranty-card">Get Warranty Card</Nav.Link>
-              <Nav.Link href="/transfer">Transfer</Nav.Link>
+              <Link to="/check-authenticity" className="links">Check Authenticity</Link>
+              <Link to="/check-expiry" className="links">Check Expiry</Link>
+              <Link to="/get-token-id" className="links">Get Token Id</Link>
+              <Link to="/get-warranty-card" className="links">Get Warranty Card</Link>
+              <Link to="/transfer" className="links">Transfer</Link>
               {/* Service Provider Only */}
-              {serviceProvider && <Nav.Link href="/service">Service</Nav.Link>}
+              {serviceProvider && <Link to="/service" className="links">Service</Link>}
               {/* Minter Only */}
               {minterRole && (
-                <Nav.Link href="/issue-warranty">Issue Warranty</Nav.Link>
+                <Link to="/issue-warranty" className="links">Issue Warranty</Link>
               )}
               {/* Roles Admin Only */}
               {(minterRoleAdmin || serviceProviderAdmin) && (
                 <>
                   {" "}
-                  <Nav.Link href="/grant-role">Grant Role</Nav.Link>
-                  <Nav.Link href="/revoke-role">Revoke Role</Nav.Link>
+                  <Link to="/grant-role" className="links">Grant Role</Link>
+                  <Link to="/revoke-role" className="links">Revoke Role</Link>
                 </>
               )}
             </Nav>

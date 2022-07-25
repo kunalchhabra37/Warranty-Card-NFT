@@ -28,9 +28,9 @@ function App() {
   return (
     <div className="App">
       <ToastContainer />
+        <BrowserRouter>
       <NavBar />
       <div className="form-style">
-        <BrowserRouter>
           <Routes>
             <Route path="/" element={<Welcome />}></Route>
             <Route
@@ -97,8 +97,8 @@ function App() {
             ></Route>
             {/* <Route path="view-nft" element={<ViewNFT />}></Route> */}
           </Routes>
-        </BrowserRouter>
       </div>
+        </BrowserRouter>
     </div>
   );
 }

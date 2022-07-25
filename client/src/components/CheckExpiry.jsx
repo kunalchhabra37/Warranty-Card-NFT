@@ -12,6 +12,7 @@ const CheckExpiry = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setRes(false);
     if (!validateBigInt(tokenID)) {
       toast.warning("Not a valid TokenId", {
         position: "top-right",
@@ -24,7 +25,7 @@ const CheckExpiry = () => {
       });
     } else {
       let res = await getExpiry(tokenID);
-      if (res.hasOwnProperty('error')) {
+      if (res.hasOwnProperty("error")) {
         console.log(res.error);
         toast.warning(res.error, {
           position: "top-right",
@@ -36,34 +37,34 @@ const CheckExpiry = () => {
           progress: undefined,
         });
       } else {
-        res = (new Date(res * 1000)).toString();
+        res = new Date(res * 1000).toString();
         console.log(res);
         setRes(res);
-        setTokenId('')
+        setTokenId("");
       }
     }
   };
 
   return (
     <>
-    <div className="container1">
-      <h1>Check Expiry</h1>
-      <Form>
-        <Form.Group className="mb-3 ctrl">
-          <Form.Label>TokenID</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="TokenID"
-            value={tokenID}
-            onChange={(e) => setTokenId(e.target.value)}
-          />
-        </Form.Group>
-        <Button variant="primary" type="submit" onClick={handleSubmit}>
-          Check
-        </Button>
-      </Form>
-    </div>
-    {res && <p className="text-white"> {res} </p>}
+      <div className="container1">
+        <h1>Check Expiry</h1>
+        <Form>
+          <Form.Group className="mb-3 ctrl">
+            <Form.Label>TokenID</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="TokenID"
+              value={tokenID}
+              onChange={(e) => setTokenId(e.target.value)}
+            />
+          </Form.Group>
+          <Button variant="primary" type="submit" onClick={handleSubmit}>
+            Check
+          </Button>
+        </Form>
+      </div>
+      {res && <p className="text-white"> {res} </p>}
     </>
   );
 };

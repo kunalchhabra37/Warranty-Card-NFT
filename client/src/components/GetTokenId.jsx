@@ -12,6 +12,7 @@ const GetTokenId = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setRes(false);
     if (!validateBigInt(serialNo)) {
       toast.warning("Not a valid serialNo", {
         position: "top-right",
@@ -24,7 +25,7 @@ const GetTokenId = () => {
       });
     } else {
       let res = await getTokenId(serialNo);
-      if (res.hasOwnProperty('error')) {
+      if (res.hasOwnProperty("error")) {
         console.log(res.error);
         toast.warning(res.error, {
           position: "top-right",
@@ -38,31 +39,31 @@ const GetTokenId = () => {
       } else {
         console.log(res);
         setRes(res);
-        setserialNo('')
+        setserialNo("");
       }
     }
   };
 
   return (
     <>
-    <div className="container1">
-      <h1>Check Expiry</h1>
-      <Form>
-        <Form.Group className="mb-3 ctrl">
-          <Form.Label>serialNo</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="serialNo"
-            value={serialNo}
-            onChange={(e) => setserialNo(e.target.value)}
-          />
-        </Form.Group>
-        <Button variant="primary" type="submit" onClick={handleSubmit}>
-          Check
-        </Button>
-      </Form>
-    </div>
-    {res && <p className="text-white"> {res} </p>}
+      <div className="container1">
+        <h1>Check Expiry</h1>
+        <Form>
+          <Form.Group className="mb-3 ctrl">
+            <Form.Label>serialNo</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="serialNo"
+              value={serialNo}
+              onChange={(e) => setserialNo(e.target.value)}
+            />
+          </Form.Group>
+          <Button variant="primary" type="submit" onClick={handleSubmit}>
+            Check
+          </Button>
+        </Form>
+      </div>
+      {res && <p className="text-white"> {res} </p>}
     </>
   );
 };

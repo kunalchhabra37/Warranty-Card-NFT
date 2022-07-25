@@ -5,7 +5,7 @@ import { WarrantyCardContext } from "../context/WarrantyCardContext";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "react-loader";
-import { Bars ,ThreeDots} from  'react-loader-spinner'
+import { Bars, ThreeDots } from "react-loader-spinner";
 
 import { validateBigInt, validateAddress } from "./Validation";
 const CheckAuthenticity = () => {
@@ -17,6 +17,7 @@ const CheckAuthenticity = () => {
   const [loading, setLoading] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setRes(false);
     setLoading(true);
     if (!validateAddress(to)) {
       toast.warning("Not a valid address", {
@@ -53,7 +54,7 @@ const CheckAuthenticity = () => {
           draggable: true,
           progress: undefined,
         });
-      setLoading(false);
+        setLoading(false);
       } else {
         console.log(res);
         setRes(res);
@@ -98,13 +99,8 @@ const CheckAuthenticity = () => {
           </Form.Group>
           {loading ? (
             <div className="text-center">
-              <Bars 
-                color="#00BFFF"
-                width={273}
-              wrapperStyle
-              wrapperClass />
+              <Bars color="#00BFFF" width={273} wrapperStyle wrapperClass />
             </div>
-            
           ) : (
             <Button variant="primary" type="submit" onClick={handleSubmit}>
               Check

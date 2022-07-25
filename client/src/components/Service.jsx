@@ -11,9 +11,9 @@ const Approve = () => {
   const [tokenID, settokenID] = useState("");
   const [res, setRes] = useState(false);
 
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setRes(false);
     if (!validateBigInt(tokenID)) {
       toast.warning("Not a valid TokenId", {
         position: "top-right",
@@ -26,7 +26,7 @@ const Approve = () => {
       });
     } else {
       let res = await incServiceCount(tokenID);
-      if(res.hasOwnProperty('error')){
+      if (res.hasOwnProperty("error")) {
         console.log(res.error);
         toast.warning(res.error, {
           position: "top-right",
@@ -37,35 +37,33 @@ const Approve = () => {
           draggable: true,
           progress: undefined,
         });
-      }else{
-      console.log(res);
-      setRes(res)
-      settokenID('')
+      } else {
+        console.log(res);
+        setRes(res);
+        settokenID("");
       }
     }
   };
   return (
     <>
-    <div className="container1">
-      <h1>Increase Service Count</h1>
-      <Form>
-        <Form.Group className="mb-3 ctrl">
-          <Form.Label>tokenID</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="tokenID"
-            value={tokenID}
-            onChange={(e) => settokenID(e.target.value)}
-          />
-        </Form.Group>
-        <Button variant="primary" type="submit" onClick={handleSubmit}>
-          Increase Service Count
-        </Button>
-      </Form>
-    </div>
-    {res && <p className="text-white">
-      {`${res.msg} at ${res.hash}`}
-      </p>}
+      <div className="container1">
+        <h1>Increase Service Count</h1>
+        <Form>
+          <Form.Group className="mb-3 ctrl">
+            <Form.Label>tokenID</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="tokenID"
+              value={tokenID}
+              onChange={(e) => settokenID(e.target.value)}
+            />
+          </Form.Group>
+          <Button variant="primary" type="submit" onClick={handleSubmit}>
+            Increase Service Count
+          </Button>
+        </Form>
+      </div>
+      {res && <p className="text-white">{`${res.msg} at ${res.hash}`}</p>}
     </>
   );
 };

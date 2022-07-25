@@ -5,14 +5,18 @@ import { WarrantyCardContext } from "../context/WarrantyCardContext";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { validateBigInt } from "./Validation";
+import { Bars } from "react-loader-spinner";
+import ViewNFT from "./ViewNFT";
 const GetNFT = () => {
   const { getTokenUri } = useContext(WarrantyCardContext);
   const [tokenID, settokenID] = useState("");
   const [res, setRes] = useState(false);
-
+  const [loading, setLoading] = useState(false);
+  const [url,setURL]=useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
     setRes(false);
+    setLoading(true);
     if (!validateBigInt(tokenID)) {
       toast.warning("Not a valid TokenId", {
         position: "top-right",
@@ -23,6 +27,7 @@ const GetNFT = () => {
         draggable: true,
         progress: undefined,
       });
+      setLoading(false);
     } else {
       let res = await getTokenUri(tokenID);
       if (res.hasOwnProperty("error")) {
@@ -38,9 +43,11 @@ const GetNFT = () => {
         });
       } else {
         console.log(res);
+        setUrl(res);
         setRes(res);
         settokenID("");
       }
+      setLoading(false);
     }
   };
   return (
@@ -57,12 +64,20 @@ const GetNFT = () => {
               onChange={(e) => settokenID(e.target.value)}
             />
           </Form.Group>
-          <Button variant="primary" type="submit" onClick={handleSubmit}>
+          {loading ? (
+            <div className="text-center">
+              <Bars color="#00BFFF" width={273} wrapperStyle wrapperClass />
+            </div>
+          ) : (
+            <Button variant="primary" type="submit" onClick={handleSubmit}>
             Get
           </Button>
+          )}
+          
         </Form>
       </div>
-      {res && <p className="text-white"> {res} </p>}
+      <br />
+      {res &&  <ViewNFT url={res} />}
     </>
   );
 };

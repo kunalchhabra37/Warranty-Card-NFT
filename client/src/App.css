@@ -89,3 +89,7 @@
 .links:hover{
   color: #fff;
 }
+.result{
+  font-size: 1.15rem;
+  margin-top: 20px;
+}

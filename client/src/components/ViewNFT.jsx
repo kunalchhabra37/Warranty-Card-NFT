@@ -1,6 +1,10 @@
 import React from "react";
 import "./nft.css";
-const ViewNFT = () => {
+const ViewNFT = (props) => {
+  const url=props.url;
+  console.log(1);
+  console.log(url);
+  console.log(2);
   return (
     <div className="nft-container">
       <div className="container2">

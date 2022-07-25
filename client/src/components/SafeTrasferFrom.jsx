@@ -5,6 +5,7 @@ import { WarrantyCardContext } from "../context/WarrantyCardContext";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { validateBigInt, validateAddress } from "./Validation";
+import { Bars } from "react-loader-spinner";
 const SafeTrasferFrom = () => {
   const { transferWarrantyCard } = useContext(WarrantyCardContext);
 
@@ -12,9 +13,11 @@ const SafeTrasferFrom = () => {
   const [tokenID, setTokenID] = useState("");
   const [from, setFrom] = useState("");
   const [res, setRes] = useState(false);
+  const [loading, setLoading] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setRes(false);
+    setLoading(true);
     if (!validateAddress(to) || !validateAddress(from)) {
       toast.warning("Not a valid address", {
         position: "top-right",
@@ -25,6 +28,7 @@ const SafeTrasferFrom = () => {
         draggable: true,
         progress: undefined,
       });
+      setLoading(false);
     } else if (!validateBigInt(tokenID)) {
       toast.warning("Not a valid tokenID", {
         position: "top-right",
@@ -35,6 +39,7 @@ const SafeTrasferFrom = () => {
         draggable: true,
         progress: undefined,
       });
+      setLoading(false);
     } else {
       let res = await transferWarrantyCard(from, to, tokenID);
       if (res.hasOwnProperty("error")) {
@@ -55,6 +60,7 @@ const SafeTrasferFrom = () => {
         setFrom("");
         setTokenID("");
       }
+      setLoading(false);
     }
   };
   return (
@@ -89,13 +95,19 @@ const SafeTrasferFrom = () => {
               onChange={(e) => setTokenID(e.target.value)}
             />
           </Form.Group>
-
-          <Button variant="primary" type="submit" onClick={handleSubmit}>
+          {loading ? (
+            <div className="text-center">
+              <Bars color="#00BFFF" width={273} wrapperStyle wrapperClass />
+            </div>
+          ) : (
+            <Button variant="primary" type="submit" onClick={handleSubmit}>
             Transfer
           </Button>
+          )}
+          
         </Form>
       </div>
-      {res && <p className="text-white">{`${res.msg} at hash: ${res.hash}`}</p>}
+      {res && <p className="text-white text-center result">{`${res.msg} at hash: ${res.hash}`}</p>}
     </>
   );
 };

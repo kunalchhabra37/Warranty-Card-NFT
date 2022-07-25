@@ -35,7 +35,7 @@ const Welcome = () => {
           />
         </p>
       )}
-      {res && <p className="text-white">Total Supply is: {res}</p>}
+      {res && <p className="text-white result">Total Supply is: {res}</p>}
     </div>
   );
 };

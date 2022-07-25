@@ -5,14 +5,16 @@ import { WarrantyCardContext } from "../context/WarrantyCardContext";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { validateBigInt } from "./Validation";
+import { Bars } from "react-loader-spinner";
 const CheckExpiry = () => {
   const [tokenID, setTokenId] = useState("");
   const [res, setRes] = useState(false);
   const { getExpiry } = useContext(WarrantyCardContext);
-
+  const [loading, setLoading] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setRes(false);
+    setLoading(true);
     if (!validateBigInt(tokenID)) {
       toast.warning("Not a valid TokenId", {
         position: "top-right",
@@ -23,6 +25,7 @@ const CheckExpiry = () => {
         draggable: true,
         progress: undefined,
       });
+      setLoading(false);
     } else {
       let res = await getExpiry(tokenID);
       if (res.hasOwnProperty("error")) {
@@ -42,6 +45,7 @@ const CheckExpiry = () => {
         setRes(res);
         setTokenId("");
       }
+      setLoading(false);
     }
   };
 
@@ -59,12 +63,19 @@ const CheckExpiry = () => {
               onChange={(e) => setTokenId(e.target.value)}
             />
           </Form.Group>
-          <Button variant="primary" type="submit" onClick={handleSubmit}>
+          {loading ? (
+            <div className="text-center">
+              <Bars color="#00BFFF" width={273} wrapperStyle wrapperClass />
+            </div>
+          ) : (
+            <Button variant="primary" type="submit" onClick={handleSubmit}>
             Check
           </Button>
+          )}
+          
         </Form>
       </div>
-      {res && <p className="text-white"> {res} </p>}
+      {res && <p className="text-white text-center result"> {res} </p>}
     </>
   );
 };

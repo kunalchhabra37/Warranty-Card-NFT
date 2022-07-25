@@ -8,6 +8,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { validateBigInt, validateAddress } from "./Validation";
+import { Bars } from "react-loader-spinner";
 const IssueWarranty = () => {
   const { issueWarrantyCard, pinFile } = useContext(WarrantyCardContext);
   const [to, setTo] = useState("");
@@ -24,12 +25,14 @@ const IssueWarranty = () => {
   const [warranty_period, setWarranty_period] = useState(new Date());
   const [attributes, setAttributes] = useState([]);
   const [res, setRes] = useState(false);
+  const [loading, setLoading] = useState(false);
   const convertTime = (date) => {
     return Math.floor(new Date(warranty_period) / 1000);
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setRes(false);
+    setLoading(true);
     if (!validateAddress(to)) {
       toast.warning("Not a valid Address", {
         position: "top-right",
@@ -40,6 +43,7 @@ const IssueWarranty = () => {
         draggable: true,
         progress: undefined,
       });
+      setLoading(false);
     } else {
       let hash = await pinFile(
         to,
@@ -92,6 +96,7 @@ const IssueWarranty = () => {
         setWarranty_period("");
         setAttributes([]);
       }
+      setLoading(false);
     }
     // console.log(convertTime(purchase_date),convertTime(warranty_period));
   };
@@ -217,16 +222,22 @@ const IssueWarranty = () => {
               onChange={(e) => setAttributes(e.target.value)}
             />
           </Form.Group>
-
-          <Button variant="primary" type="submit" onClick={handleSubmit}>
+          {loading ? (
+            <div className="text-center">
+              <Bars color="#00BFFF" width={273} wrapperStyle wrapperClass />
+            </div>
+          ) : (
+            <Button variant="primary" type="submit" onClick={handleSubmit}>
             Issue
           </Button>
+          )}
+          
         </Form>
       </div>
       {res && (
         <>
-          <p className="text-white">{`${res.msg} at hash: ${res.hash}`}</p>
-          <p className="text-white">{`Token Id: ${res.tokenId}`}</p>
+          <p className="text-white text-center result">{`${res.msg} at hash: ${res.hash}`}</p>
+          <p className="text-white text-center result">{`Token Id: ${res.tokenId}`}</p>
         </>
       )}
     </>

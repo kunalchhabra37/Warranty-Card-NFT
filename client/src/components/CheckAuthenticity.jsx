@@ -4,8 +4,7 @@ import Form from "react-bootstrap/Form";
 import { WarrantyCardContext } from "../context/WarrantyCardContext";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Loader from "react-loader";
-import { Bars, ThreeDots } from "react-loader-spinner";
+import { Bars } from "react-loader-spinner";
 
 import { validateBigInt, validateAddress } from "./Validation";
 const CheckAuthenticity = () => {
@@ -108,7 +107,7 @@ const CheckAuthenticity = () => {
           )}
         </Form>
       </div>
-      {res && <p className="text-white"> {res} </p>}
+      {res && <p className="text-white text-center result"> {res} </p>}
     </>
   );
 };

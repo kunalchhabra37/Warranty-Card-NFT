@@ -30,9 +30,7 @@ app.post("/api/mint/warrantyCard", async (req, res) => {
     WarrantyCard2.history.purchase_date = req.body.purchase_date;
     WarrantyCard2.history.transaction_id = req.body.transaction_id;
     WarrantyCard2.history.transaction_method = req.body.transaction_method;
-    WarrantyCard2.warranty_period = req.body.warrantyEnd;
-    WarrantyCard2.attributes = req.body.attributes;
-    
+    WarrantyCard2.warranty_period = req.body.warrantyEnd;    
     let ipfsHash = await pinFile(WarrantyCard2);
 
     let mint = await issueWarrantyCard(

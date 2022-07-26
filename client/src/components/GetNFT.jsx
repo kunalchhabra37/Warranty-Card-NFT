@@ -42,7 +42,9 @@ const GetNFT = () => {
         });
       } else {
         console.log(res);
+        res = await fetch(res).then((response) => response.json());
         setRes(res);
+        console.log(res);
         settokenID("");
       }
       setLoading(false);
@@ -68,14 +70,21 @@ const GetNFT = () => {
             </div>
           ) : (
             <Button variant="primary" type="submit" onClick={handleSubmit}>
-            Get
+              Get
             </Button>
           )}
-          
         </Form>
       </div>
       <br />
-      {res &&  <ViewNFT url={res} />}
+      {res && (
+        <ViewNFT
+          name={res.name}
+          image={res.image}
+          description={res.description}
+          serialNo = {res.serial_no}
+          warrantyEnd = {res.warranty_period}
+        />
+      )}
     </>
   );
 };

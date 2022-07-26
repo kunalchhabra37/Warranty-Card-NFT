@@ -11,8 +11,9 @@ const Welcome = () => {
     setRes(totalSupply);
   } 
   return (
-    <div>
-      <h2 className="text-white">Warranty Card NFT App</h2>
+    <div className="container text-center">
+      <h1 className="text-white">Warranty Card NFT App</h1>
+      <br />
       <p className="text-white">
         Your Only Place to Check your Product Authencticity, warranty expiry and
         get your warranty card.
@@ -25,15 +26,17 @@ const Welcome = () => {
         />
       )}
       {connectedWallet && (
+        <>
         <p className="text-muted">
           Connected Wallet Address is: {connectedWallet}
+          </p>
           <br />
           <Button
             text="Get Total Supply"
             className="btn-primary text-white btn-style"
             onClick={getTotalSupply}
           />
-        </p>
+        </>
       )}
       {res && <p className="text-white result">Total Supply is: {res}</p>}
     </div>

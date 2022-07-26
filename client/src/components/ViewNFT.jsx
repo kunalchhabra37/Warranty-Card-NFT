@@ -1,32 +1,25 @@
 import React from "react";
 import "./nft.css";
-const ViewNFT = (props) => {
-  const url = props.url;
-  async function getapi(url) {
-    const response = await fetch(url);
-    var data = await response.json();
-    console.log(data.name);
-}
+const ViewNFT = ({name, image, description, serialNo, warrantyEnd}) => {
 // Calling that async function
-getapi(url);
+console.log({name, image, description, serialNo, warrantyEnd})
   return (
     <div className="nft-container">
       <div className="container2">
-        <article className="main-image">
-          <img src="" alt="hi" />
+        <article className="main-image text-center">
+          <img src={image} alt="hi" />
         </article>
 
         <article>
-          <h2>{data.name}</h2>
-          <p>Power to Create New Power to Balance The Universe.</p>
+          <h2>{name}</h2>
+          <p> {description} </p>
 
           <ul>
-            <li>1 ETH</li>
-            <li>2 days left</li>
+            <li >Serial No: {serialNo}</li>
+            <li>Expiry: {new Date(warrantyEnd * 1000).toISOString().split('T')[0]
+}</li>
           </ul>
-          <ul>
-            <li> hi</li>
-          </ul>
+          
         </article>
       </div>
     </div>

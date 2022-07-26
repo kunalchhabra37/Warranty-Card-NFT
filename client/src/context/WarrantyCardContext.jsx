@@ -365,7 +365,6 @@ export const WarrantyCardProvider = ({ children }) => {
     transaction_id,
     transaction_method,
     warranty_period,
-    attributes
   ) => {
 
     // Configration for the api call
@@ -393,7 +392,6 @@ export const WarrantyCardProvider = ({ children }) => {
       WarrantyCard2.history.transaction_id = transaction_id;
       WarrantyCard2.history.transaction_method = transaction_method;
       WarrantyCard2.warranty_period = warranty_period;
-      WarrantyCard2.attributes = attributes;
       pinataConfig.pinataContent = WarrantyCard2;
 
       config.data = JSON.stringify(pinataConfig);

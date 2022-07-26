@@ -1,0 +1,45 @@
+{
+    "name": "Product 1",
+    "image": "https://ipfs.io/ipfs/Qme4wrfYvByhshpGHFLuDq5hAg1ftMBWV63hciPBZoNC5D",
+    "description": "This is your Products Warranty Card that can be used to claim you Product",
+    "serial_no": 1234,
+    "product_Id": 56789,
+    "external": "https://store.com/warranty/terms",
+    "history":{
+        "purchase_date":"12/04/2022 00:00:00",
+        "invoice_no":123456,
+        "transaction_id":123456,
+        "transaction_method":"Credit Card",
+        "payment_gateway":"Flipkart Payment Gateway",
+        "platform": "Flipkart",
+        "repairs": [],
+        "warranty_used":[]
+    },
+    "warranty_period": "12/04/2024",
+    "attributes":[
+        {
+            "trait_type":"type",
+            "value":"Mobile Phone"
+        },
+        {
+            "trait_type":"ram",
+            "value":"6 GB"
+        },
+        {
+            "trait_type":"memory",
+            "value":"64 GB"
+        },
+        {
+            "trait_type":"color",
+            "value":"Steel Blue"
+        },
+        {
+            "trait_type":"company",
+            "value":"Poco"
+        },
+        {
+            "trait_type":"model",
+            "value":"X2 Pro"
+        }
+    ]
+}

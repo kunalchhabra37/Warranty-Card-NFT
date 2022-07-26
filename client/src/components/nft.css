@@ -75,7 +75,7 @@
 }
 
 .container2 ul li:first-child {
-  color: var(--cyan);
+  color: #fff;
 }
 
 @media (min-width: 500px) {

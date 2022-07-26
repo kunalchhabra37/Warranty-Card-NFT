@@ -64,7 +64,7 @@ contract WarrantyCard is
     }
 
     function _baseURI() internal pure override returns (string memory) {
-        return "https://gateway.pinata.cloud/ipfs/";
+        return "https://ipfs.io/ipfs/";
     }
 
     // Issue warranty Card to an address

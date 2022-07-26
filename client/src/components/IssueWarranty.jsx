@@ -23,7 +23,6 @@ const IssueWarranty = () => {
   const [transaction_id, setTransaction_id] = useState("");
   const [transaction_method, setTransaction_method] = useState("");
   const [warranty_period, setWarranty_period] = useState(new Date());
-  const [attributes, setAttributes] = useState([]);
   const [res, setRes] = useState(false);
   const [loading, setLoading] = useState(false);
   const convertTime = (date) => {
@@ -58,7 +57,6 @@ const IssueWarranty = () => {
         transaction_id,
         transaction_method,
         convertTime(warranty_period),
-        attributes
       );
       console.log(hash);
 
@@ -94,7 +92,6 @@ const IssueWarranty = () => {
         setTransaction_id("");
         setTransaction_method("");
         setWarranty_period("");
-        setAttributes([]);
       }
       setLoading(false);
     }
@@ -213,15 +210,6 @@ const IssueWarranty = () => {
               placeholderText="Enter warranty_period"
             />
           </Form.Group>
-          <Form.Group className="mb-3 ctrl">
-            <Form.Label>Attributes</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter attributes"
-              value={attributes}
-              onChange={(e) => setAttributes(e.target.value)}
-            />
-          </Form.Group>
           {loading ? (
             <div className="text-center">
               <Bars color="#00BFFF" width={273} wrapperStyle wrapperClass />
@@ -236,8 +224,8 @@ const IssueWarranty = () => {
       </div>
       {res && (
         <>
-          <p className="text-white text-center result">{`${res.msg} at hash: ${res.hash}`}</p>
           <p className="text-white text-center result">{`Token Id: ${res.tokenId}`}</p>
+          <p className="text-white text-center result">{`${res.msg} at hash: ${res.hash}`}</p>
         </>
       )}
     </>

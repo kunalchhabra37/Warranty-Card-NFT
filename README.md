@@ -14,9 +14,9 @@ Features of the Project :-
 - Warranty Cards can be transaferred on resale of the product.
 
 The Project consists of 3 Elements:
-1. ERC721 Solidity Contract for Warranty Card .
-2. GUI to interact with Contract.
-3. Node Server for minting API and Burn Bot.
+1. [ERC721 Solidity Contract for Warranty Card](#erc721-solidity-contract)
+2. [GUI to interact with Contract](#graphical-user-interface)
+3. [Node Server for minting API and Burn Bot](#node-server)
 
 ### Libraries and Open Source projects used
 - openzeppelin ERC21 for ERC721 standard contract
@@ -88,3 +88,24 @@ The Project consists of 3 Elements:
 #### Burn Bot
 - Everyday bot checks for expired warranty cards off-chain.
 - Bot burns the expired Warranty Cards if present.
+---
+
+## Setup Project
+1. Perform `npm install` in main folder and client folder.
+2. Rename .env.example to .env
+3. Put values in .env
+4. Perform above steps for /client/src/utils/constants.example.js
+5. To deploy contract run:
+```
+npx hardhat run scripts/deploy.js --network fuji/polygon_mumbai
+```
+6. Paste contract address in env and constants.js
+7. Start Node server
+```
+npm run start
+```
+8. Start React Server
+```
+npm run build
+npm run preview
+```

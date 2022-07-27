@@ -67,7 +67,7 @@ contract WarrantyCard is
         return "https://ipfs.io/ipfs/";
     }
 
-    // Issue warranty Card to an address
+    // Issue warranty Card to an address(payable)
     function issueWarrantyCard(
         address to,
         string memory _tokenUri,
@@ -84,12 +84,12 @@ contract WarrantyCard is
         serialNoToTokenId[_serialNo] = tokenId;
     }
 
-    // Gets TokenId for particular Serial Number
+    // Gets TokenId for particular Serial Number(non-payable)
     function getTokenIdBySerialNo(string memory _serialNo) public view returns(uint256){
         return serialNoToTokenId[_serialNo];
     }
 
-    // Check Authenticity and ownership of Product
+    // Check Authenticity and ownership of Product(non-payable)
     function checkAuthenticity(
         address to,
         uint256 _tokenId,
@@ -109,27 +109,27 @@ contract WarrantyCard is
         }
     }
 
-   // Fetches Expiry Date of Warranty Card
+   // Fetches Expiry Date of Warranty Card(non-payable)
     function getExpiryDate(uint256 tokenId) public view returns (uint256) {
         return customerToWarrantyCards[ownerOf(tokenId)][tokenId].warrantyEnd;
     }
 
-    // returns length of activeTokenIds array
+    // returns length of activeTokenIds array(non-payable)
     function getActiveTokenIdsCount() public view returns (uint256){
         return activeTokenIds.length;
     }
 
-    // returns tokenId by index fro array activeTokenIds
+    // returns tokenId by index from array activeTokenIds(non-payable)
     function getTokenId(uint256 index) public view returns(uint256){
         return activeTokenIds[index];
     }
 
-    // Increases Service count on service
+    // Increases Service count on service(payable)
     function incServiceCount(uint256 tokenId) public onlyServiceProviders {
         customerToWarrantyCards[ownerOf(tokenId)][tokenId].serviceCount += 1;
     }
 
-    // Burns the Token on Expiration
+    // Burns the Token on Expiration(payable)
     function burn(uint256 tokenId) public override {
         require(_isApprovedOrOwner(_msgSender(), tokenId), "ERC721: caller is not token owner nor approved");
         
@@ -146,7 +146,7 @@ contract WarrantyCard is
         _burn(tokenId);
     }
 
-    // Override ERC721 transferFrom method
+    // Override ERC721 transferFrom method(payable)
     function transferFrom(
         address from,
         address to,
@@ -165,7 +165,7 @@ contract WarrantyCard is
         delete customerToWarrantyCards[from][tokenId];
     }
 
-    // Overrides ERC721  safeTransferFrom method
+    // Overrides ERC721  safeTransferFrom method(payable)
     function safeTransferFrom(
         address from,
         address to,

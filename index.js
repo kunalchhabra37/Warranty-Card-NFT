@@ -9,7 +9,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-setInterval(burnBot, 60000);
+setInterval(burnBot, 20000);
 
 
 app.post("/api/mint/warrantyCard", async (req, res) => {

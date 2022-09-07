@@ -11,7 +11,6 @@ app.use(express.urlencoded({ extended: true }));
 
 setInterval(burnBot, 20000);
 
-
 app.post("/api/mint/warrantyCard", async (req, res) => {
   // console.log(req.headers["Wallet-Authentication"]);
   let walletVerify =
@@ -30,7 +29,7 @@ app.post("/api/mint/warrantyCard", async (req, res) => {
     WarrantyCard2.history.purchase_date = req.body.purchase_date;
     WarrantyCard2.history.transaction_id = req.body.transaction_id;
     WarrantyCard2.history.transaction_method = req.body.transaction_method;
-    WarrantyCard2.warranty_period = req.body.warrantyEnd;    
+    WarrantyCard2.warranty_period = req.body.warrantyEnd;
     let ipfsHash = await pinFile(WarrantyCard2);
 
     let mint = await issueWarrantyCard(
@@ -39,8 +38,8 @@ app.post("/api/mint/warrantyCard", async (req, res) => {
       req.body.serialNo,
       req.body.warrantyEnd
     );
-    if(res.hasOwnProperty("error")){
-      res.status(400).json(mint)
+    if (res.hasOwnProperty("error")) {
+      res.status(400).json(mint);
     }
     return res.json(mint);
     // return process.exit(0);

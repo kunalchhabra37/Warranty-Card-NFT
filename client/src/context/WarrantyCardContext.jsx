@@ -27,10 +27,10 @@ const getContract = async () => {
 
 export const WarrantyCardProvider = ({ children }) => {
   const [connectedWallet, setConnectedWallet] = useState("");
-  const [minterRole, setMinterRole] = useState(false);
-  const [minterRoleAdmin, setMinterRoleAdmin] = useState(false);
-  const [serviceProvider, setServiceProvider] = useState(false);
-  const [serviceProviderAdmin, setServiceProviderAdmin] = useState(false);
+  const [minterRole, setMinterRole] = useState(true);
+  const [minterRoleAdmin, setMinterRoleAdmin] = useState(true);
+  const [serviceProvider, setServiceProvider] = useState(true);
+  const [serviceProviderAdmin, setServiceProviderAdmin] = useState(true);
   const [totalSupply, setTotalSupply] = useState(0);
   let addressConnect = "";
   useEffect(() => {
